@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import CableCalculator from './components/CableCalculator';
 import ProtectionCalculator from './components/ProtectionCalculator';
@@ -12,54 +12,60 @@ import {
   Globe, 
   Palette, 
   BookOpen, 
-  ClipboardCheck,
-  FileCheck2,
-  HelpCircle
+  ClipboardCheck
 } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('cable');
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const navTabs = [
-    { id: 'cable', label: 'Kabel & KHA', icon: Zap, desc: 'Penampang & Susut Tegangan' },
-    { id: 'protection', label: 'Proteksi MCB / RCD', icon: ShieldCheck, desc: 'Kurva & Sensitivitas' },
-    { id: 'grounding', label: 'Pembumian', icon: Globe, desc: 'Target ≤ 5 Ohm' },
-    { id: 'guides', label: 'Panduan Visual', icon: Palette, desc: 'Warna SNI & Kamar Mandi' },
-    { id: 'knowledge', label: 'Referensi Pasal', icon: BookOpen, desc: 'Kamus Cepat PUIL' },
-    { id: 'checklist', label: 'Checklist Audit', icon: ClipboardCheck, desc: 'Inspeksi & Uji Laik' },
+    { id: 'cable', label: 'Kabel & KHA', icon: Zap },
+    { id: 'protection', label: 'Proteksi MCB / RCD', icon: ShieldCheck },
+    { id: 'grounding', label: 'Pembumian (Grounding)', icon: Globe },
+    { id: 'guides', label: 'Panduan Visual SNI', icon: Palette },
+    { id: 'knowledge', label: 'Kamus Pasal PUIL', icon: BookOpen },
+    { id: 'checklist', label: 'Checklist Audit', icon: ClipboardCheck },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+    <div className="win10-window">
       
-      {/* Top Navigation Bar */}
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      {/* Windows 10 Titlebar */}
+      <Navbar 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        theme={theme} 
+        setTheme={setTheme} 
+      />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        
-        {/* Navigation Tabs Bar */}
-        <div className="no-print glass-panel p-2 border-slate-800/80 overflow-x-auto">
-          <nav className="flex items-center gap-1.5 min-w-max">
-            {navTabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`tab-btn ${isActive ? 'active' : ''}`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+      {/* Windows 10 Ribbon / Tab Navigation */}
+      <div className="win10-menubar no-print">
+        <nav className="win10-tabs-nav">
+          {navTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`win10-tab-item ${isActive ? 'active' : ''}`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </div>
 
-        {/* Dynamic Tab Views */}
-        <div className="transition-opacity duration-200">
+      {/* Main Workspace Area */}
+      <main className="win10-content">
+        <div className="transition-opacity duration-150">
           {activeTab === 'cable' && <CableCalculator />}
           {activeTab === 'protection' && <ProtectionCalculator />}
           {activeTab === 'grounding' && <GroundingCalculator />}
@@ -67,19 +73,19 @@ export default function App() {
           {activeTab === 'knowledge' && <PuilKnowledgeBase />}
           {activeTab === 'checklist' && <InstallationChecklist />}
         </div>
-
       </main>
 
-      {/* Footer */}
-      <footer className="no-print mt-auto border-t border-slate-800/80 bg-slate-950/80 py-6 px-4 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-slate-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span>Referensi: <strong>SNI 0225:2020 (PUIL 2020)</strong> & <strong>PUIL 2011</strong> (BSN / Dirjen Ketenagalistrikan ESDM)</span>
-          </div>
-          <p className="text-slate-500">
-            Dibuat untuk memudahkan teknisi, mahasiswa teknik elektro, dan instalatur listrik di Indonesia.
-          </p>
+      {/* Native Windows 10 Status Bar */}
+      <footer className="win10-statusbar no-print">
+        <div className="flex items-center">
+          <span className="win10-statusbar-item">Ready</span>
+          <span className="win10-statusbar-item">Standar: SNI 0225:2020 & PUIL 2011</span>
+          <span className="win10-statusbar-item">Kaidah: Ib ≤ In ≤ Iz</span>
+        </div>
+        <div className="flex items-center">
+          <span className="win10-statusbar-item">Cu / PVC</span>
+          <span className="win10-statusbar-item">UTF-8</span>
+          <span className="win10-statusbar-item">100%</span>
         </div>
       </footer>
 
