@@ -76,11 +76,11 @@ export default function ProtectionCalculator() {
       </div>
 
       {/* Interactive Simulator Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="calc-container">
 
         {/* Simulator Controls */}
-        <div className="lg:col-span-5 glass-panel p-6 border-slate-800 space-y-5">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 pb-3 border-b border-slate-800">
+        <div className="win10-card space-y-4">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 pb-2 border-b border-slate-800">
             <Sliders className="w-4 h-4 text-amber-400" />
             Simulator Respon Arus MCB
           </h3>
@@ -135,7 +135,7 @@ export default function ProtectionCalculator() {
         </div>
 
         {/* Curves Comparison */}
-        <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
 
           {/* Curve B */}
           <div className="glass-panel p-5 border-slate-800 flex flex-col justify-between hover:border-sky-500/40 transition">
@@ -207,34 +207,22 @@ export default function ProtectionCalculator() {
               Sesuai PUIL 2011/2020 Bagian 411.3.3: Perlindungan mutlak terhadap sengatan listrik dan kebakaran.
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-1.5">
             <button
               onClick={() => setRcdApplication('10ma')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition border ${
-                rcdApplication === '10ma'
-                  ? 'bg-sky-500/20 border-sky-500 text-sky-300'
-                  : 'bg-slate-900 border-slate-800 text-slate-400'
-              }`}
+              className={`win10-btn ${rcdApplication === '10ma' ? 'win10-btn-primary' : ''}`}
             >
               10 mA
             </button>
             <button
               onClick={() => setRcdApplication('30ma')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition border ${
-                rcdApplication === '30ma'
-                  ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300 ring-1 ring-emerald-500'
-                  : 'bg-slate-900 border-slate-800 text-slate-400'
-              }`}
+              className={`win10-btn ${rcdApplication === '30ma' ? 'win10-btn-primary' : ''}`}
             >
               30 mA (Wajib Stop Kontak)
             </button>
             <button
               onClick={() => setRcdApplication('300ma')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition border ${
-                rcdApplication === '300ma'
-                  ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-                  : 'bg-slate-900 border-slate-800 text-slate-400'
-              }`}
+              className={`win10-btn ${rcdApplication === '300ma' ? 'win10-btn-primary' : ''}`}
             >
               300 mA (Proteksi Api)
             </button>

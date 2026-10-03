@@ -80,11 +80,11 @@ export default function GroundingCalculator() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="calc-container">
 
         {/* Input Parameters */}
-        <div className="lg:col-span-7 space-y-5">
-          <div className="glass-panel p-6 border-slate-800 space-y-5">
+        <div className="space-y-4">
+          <div className="win10-card space-y-4">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 pb-3 border-b border-slate-800">
               <Layers className="w-4 h-4 text-emerald-400" />
               Karakteristik Tanah & Pasak Elektroda
@@ -163,17 +163,13 @@ export default function GroundingCalculator() {
                 <span>Jumlah Batang Elektroda Paralel</span>
                 <span className="text-emerald-400 font-bold font-mono">{rodCount} Batang Pasak</span>
               </label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="win10-segmented">
                 {[1, 2, 3, 4].map((count) => (
                   <button
                     key={count}
                     type="button"
                     onClick={() => setRodCount(count)}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold border transition ${
-                      rodCount === count
-                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-                    }`}
+                    className={`win10-segment-btn ${rodCount === count ? 'active' : ''}`}
                   >
                     {count} Batang
                   </button>
@@ -188,7 +184,7 @@ export default function GroundingCalculator() {
         </div>
 
         {/* Calculation Output Card */}
-        <div className="lg:col-span-5 space-y-5">
+        <div className="space-y-4">
           <div className="glass-panel p-6 border-emerald-500/30 shadow-lg shadow-emerald-500/5 space-y-5">
             <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
