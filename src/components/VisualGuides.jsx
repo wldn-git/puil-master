@@ -249,9 +249,14 @@ function EarthingDiagram({ systemId }) {
         )}
 
         {isTT && (
-          <text x="370" y="165" textAnchor="middle" fill="var(--win-text)" fontSize="10" fontStyle="italic" fontWeight="700">
-            (Tanpa Kawat Proteksi PE dari PLN - Pembumian Mandiri di Rumah)
-          </text>
+          <g>
+            <text x="350" y="156" textAnchor="middle" fill="var(--win-text)" fontSize="9.5" fontStyle="italic" fontWeight="700">
+              Tanpa Kawat Proteksi PE dari PLN
+            </text>
+            <text x="350" y="170" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8.5" fontStyle="italic" fontWeight="700">
+              (Pembumian Mandiri Pasak Lokal di Rumah)
+            </text>
+          </g>
         )}
 
         {/* ================= RIGHT: INSTALASI KONSUMEN ================= */}
@@ -797,9 +802,9 @@ export default function VisualGuides() {
                 </h3>
               </div>
 
-              <div className="text-right">
-                <span className="text-[11px] text-slate-400 font-mono block">Kode Huruf IEC 60364</span>
-                <span className="text-xs font-bold text-amber-400 font-mono">
+              <div className="text-right flex flex-col items-end shrink-0">
+                <span className="text-[10px] text-slate-400 font-mono leading-tight">Kode Huruf IEC 60364:</span>
+                <span className="text-xs font-black text-amber-500 font-mono mt-0.5 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30">
                   {activeEarthingSystem.id}
                 </span>
               </div>

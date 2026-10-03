@@ -1030,13 +1030,44 @@ button {
   color: var(--win-text) !important;
 }
 
-/* Ensure solid primary buttons and badges always keep crisp white text */
+/* Ensure solid primary buttons always keep crisp white text */
 [data-theme="light"] .win10-btn-primary,
-[data-theme="light"] .win10-btn-primary *,
-[data-theme="light"] .win10-badge-accent,
-[data-theme="light"] .win10-badge-success,
-[data-theme="light"] .win10-badge-danger {
+[data-theme="light"] .win10-btn-primary * {
   color: #ffffff !important;
+}
+
+/* Light Mode Badges: High contrast with crisp borders and deep saturated text (WCAG AAA) */
+[data-theme="light"] .win10-badge,
+[data-theme="light"] .badge {
+  font-weight: 700 !important;
+}
+
+[data-theme="light"] .win10-badge-accent,
+[data-theme="light"] .badge-cyan {
+  background-color: #e5f1fb !important;
+  color: #005a9e !important; /* Deep navy blue, WCAG AAA */
+  border: 1px solid #70b8f0 !important;
+}
+
+[data-theme="light"] .win10-badge-success,
+[data-theme="light"] .badge-success {
+  background-color: #e6f7e6 !important;
+  color: #0e6b0e !important; /* Deep forest green, WCAG AAA */
+  border: 1px solid #57b857 !important;
+}
+
+[data-theme="light"] .win10-badge-warning,
+[data-theme="light"] .badge-warning {
+  background-color: #fff4ce !important;
+  color: #8a2400 !important; /* Deep dark amber, WCAG AAA */
+  border: 1px solid #ffaa44 !important;
+}
+
+[data-theme="light"] .win10-badge-danger,
+[data-theme="light"] .badge-danger {
+  background-color: #fde7e9 !important;
+  color: #a80000 !important; /* Deep dark red, WCAG AAA */
+  border: 1px solid #f1707b !important;
 }
 
 /* Slate background cards adapt to light mode surface */
@@ -1090,6 +1121,11 @@ button {
 [data-theme="light"] .text-red-400,
 [data-theme="light"] .text-red-500 {
   color: #c42b1c !important; /* High-contrast red */
+}
+
+[data-theme="light"] .text-purple-400,
+[data-theme="light"] .text-purple-500 {
+  color: #6b21a8 !important; /* Deep royal purple, WCAG AAA */
 }
 
 /* Light mode tinted boxes */

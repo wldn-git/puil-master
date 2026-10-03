@@ -277,13 +277,13 @@ export default function MotorCircuitCalculator() {
             <span className="text-slate-400 font-bold block uppercase text-[10px] tracking-wider">
               Rumus PUIL 510.5.3:
             </span>
-            <div className="text-sky-300">
+            <div className="font-bold text-sky-500">
               KHA = (125% × In_maks) + Σ In_lainnya
             </div>
             <div className="text-slate-300 pt-0.5">
               = (1.25 × {calculation.maxMotor?.In || 0} A) + {calculation.sumOtherIn} A
             </div>
-            <div className="text-amber-400 font-bold pt-0.5">
+            <div className="font-bold text-amber-500 pt-0.5">
               = {calculation.maxMotor ? (1.25 * calculation.maxMotor.In).toFixed(1) : 0} A + {calculation.sumOtherIn} A = {calculation.khaFeeder} A
             </div>
           </div>
@@ -292,13 +292,13 @@ export default function MotorCircuitCalculator() {
           <div className="space-y-2 text-xs">
             <div className="p-2.5 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
               <span className="text-slate-400">Rekomendasi Kabel Feeder:</span>
-              <span className="font-bold text-emerald-400 font-mono">
+              <span className="font-bold text-emerald-500 font-mono">
                 {calculation.feederCableRecommendation}
               </span>
             </div>
             <div className="p-2.5 rounded bg-slate-900/60 border border-slate-800 flex items-center justify-between">
               <span className="text-slate-400">GPHP Feeder (Maks. {calculation.maxFeederGphpAllowed}A):</span>
-              <span className="font-bold text-amber-400 font-mono">
+              <span className="font-bold text-amber-500 font-mono">
                 MCCB {calculation.recommendedBreaker || calculation.recommendedFeederBreaker} A
               </span>
             </div>
