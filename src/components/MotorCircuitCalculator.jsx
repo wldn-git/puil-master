@@ -62,6 +62,17 @@ function getClosestBreaker(maxCalculatedCurrent) {
   return STANDARD_BREAKER_RATINGS[0];
 }
 
+function getShortStartName(id) {
+  switch (id) {
+    case 'STAR_DELTA': return 'Asut: Bintang-Delta';
+    case 'DOL': return 'Asut: Langsung (DOL)';
+    case 'AUTOTRAFO': return 'Asut: Autotrafo';
+    case 'WOUND_ROTOR': return 'Asut: Rotor Lilit';
+    case 'SOFT_STARTER': return 'Asut: Soft Starter';
+    default: return 'Asut Standar';
+  }
+}
+
 // Data awal persis contoh Gambar 510.5-2 PUIL 2011 / Gambar 5100.5-2 PUIL 2020
 const INITIAL_PUIL_CASE = [
   {
@@ -438,10 +449,10 @@ export default function MotorCircuitCalculator() {
         {/* SVG Interactive Single Line Diagram */}
         {(() => {
           const branchCount = calculation.motorResults.length;
-          const colWidth = 240;
-          const marginX = 50;
-          const svgWidth = Math.max(760, marginX * 2 + branchCount * colWidth);
-          const svgHeight = 490;
+          const colWidth = 260;
+          const marginX = 60;
+          const svgWidth = Math.max(820, marginX * 2 + branchCount * colWidth);
+          const svgHeight = 540;
           const feederX = svgWidth / 2;
           const busbarX1 = marginX + 20;
           const busbarX2 = svgWidth - marginX - 20;
@@ -453,48 +464,51 @@ export default function MotorCircuitCalculator() {
             >
               <svg 
                 viewBox={`0 0 ${svgWidth} ${svgHeight}`} 
-                className="w-full min-w-[720px] h-auto font-sans select-none"
+                className="w-full min-w-[760px] h-auto font-sans select-none"
               >
                 {/* ================= 1. SALURAN MASUK (FEEDER) ================= */}
                 {/* Sumber 3-Fasa Tag */}
-                <rect x={feederX - 110} y="15" width="220" height="28" rx="4" fill="#0284c7" />
+                <rect x={feederX - 120} y="15" width="240" height="28" rx="4" fill="#0284c7" />
                 <text x={feederX} y="33" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="800">
-                  SUMBER DAYA 3-FASA (400V)
+                  SUMBER DAYA 3-FASA (400V / 50Hz)
                 </text>
 
                 {/* Wire from source to Feeder Breaker */}
-                <line x1={feederX} y1="43" x2={feederX} y2="58" stroke="var(--win-text)" strokeWidth="2.5" />
+                <line x1={feederX} y1="43" x2={feederX} y2="56" stroke="var(--win-text)" strokeWidth="2.5" />
 
                 {/* GPHP Feeder Breaker (MCCB) */}
-                <rect x={feederX - 125} y="58" width="250" height="34" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="2" />
-                <rect x={feederX - 125} y="58" width="250" height="15" fill="#b45309" />
-                <text x={feederX} y="69" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                <rect x={feederX - 135} y="56" width="270" height="42" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="2" />
+                <rect x={feederX - 135} y="56" width="270" height="15" rx="4" fill="#b45309" />
+                <text x={feederX} y="67" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
                   GPHP FEEDER (PENGAMAN HUBUNG PENDEK)
                 </text>
-                <text x={feederX} y="85" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                <text x={feederX} y="82" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
                   MCCB {calculation.recommendedFeederBreaker} Ampere
+                </text>
+                <text x={feederX} y="93" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8.5">
+                  Batas Maks PUIL: ≤ {calculation.maxFeederGphpAllowed}A
                 </text>
 
                 {/* Wire from Breaker to Feeder Cable */}
-                <line x1={feederX} y1="92" x2={feederX} y2="105" stroke="var(--win-text)" strokeWidth="2.5" />
+                <line x1={feederX} y1="98" x2={feederX} y2="112" stroke="var(--win-text)" strokeWidth="2.5" />
 
                 {/* Kabel Feeder Pill */}
-                <rect x={feederX - 145} y="105" width="290" height="22" rx="3" fill="#059669" stroke="#047857" strokeWidth="1" />
-                <text x={feederX} y="120" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">
+                <rect x={feederX - 150} y="112" width="300" height="24" rx="3" fill="#059669" stroke="#047857" strokeWidth="1" />
+                <text x={feederX} y="128" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">
                   Kabel Feeder: KHA ≥ {calculation.khaFeeder}A ({calculation.feederCableRecommendation})
                 </text>
 
                 {/* Wire into Busbar */}
-                <line x1={feederX} y1="127" x2={feederX} y2="140" stroke="var(--win-text)" strokeWidth="3" />
+                <line x1={feederX} y1="136" x2={feederX} y2="158" stroke="var(--win-text)" strokeWidth="3" />
 
                 {/* ================= 2. REL PEMBAGI / BUSBAR (TEMBAGA) ================= */}
                 {/* Thick Copper Busbar */}
-                <rect x={busbarX1} y="137" width={busbarX2 - busbarX1} height="8" rx="2" fill="#d97706" stroke="#92400e" strokeWidth="1.5" />
-                <text x={busbarX1 + 10} y="132" fill="var(--win-text)" fontSize="10" fontWeight="800">
+                <rect x={busbarX1} y="158" width={busbarX2 - busbarX1} height="10" rx="2" fill="#d97706" stroke="#92400e" strokeWidth="1.5" />
+                <text x={busbarX1 + 10} y="152" fill="var(--win-text)" fontSize="10" fontWeight="800">
                   REL PEMBAGI / BUSBAR PHB MOTOR (R - S - T)
                 </text>
                 {/* Node for Feeder entry */}
-                <circle cx={feederX} cy="141" r="5" fill="#78350f" />
+                <circle cx={feederX} cy="163" r="5" fill="#78350f" />
 
                 {/* ================= 3. SIRKIT CABANG TIAP MOTOR ================= */}
                 {calculation.motorResults.map((motor, i) => {
@@ -504,16 +518,16 @@ export default function MotorCircuitCalculator() {
                   return (
                     <g key={motor.id}>
                       {/* Junction Node on Busbar */}
-                      <circle cx={colCenter} cy="141" r="4.5" fill="#78350f" />
+                      <circle cx={colCenter} cy="163" r="4.5" fill="#78350f" />
 
                       {/* Drop line from busbar to Cabang Header */}
-                      <line x1={colCenter} y1="145" x2={colCenter} y2="162" stroke="var(--win-text)" strokeWidth="2.5" />
+                      <line x1={colCenter} y1="168" x2={colCenter} y2="184" stroke="var(--win-text)" strokeWidth="2.5" />
 
                       {/* Cabang Header Tag */}
                       <rect 
-                        x={colCenter - 65} 
-                        y="162" 
-                        width="130" 
+                        x={colCenter - 75} 
+                        y="184" 
+                        width="150" 
                         height="22" 
                         rx="3" 
                         fill={isHighest ? '#d97706' : 'var(--win-surface)'} 
@@ -522,7 +536,7 @@ export default function MotorCircuitCalculator() {
                       />
                       <text 
                         x={colCenter} 
-                        y="177" 
+                        y="199" 
                         textAnchor="middle" 
                         fill={isHighest ? '#ffffff' : 'var(--win-text)'} 
                         fontSize="10" 
@@ -532,62 +546,62 @@ export default function MotorCircuitCalculator() {
                       </text>
 
                       {/* Wire to GPHP Breaker */}
-                      <line x1={colCenter} y1="184" x2={colCenter} y2="200" stroke="var(--win-text)" strokeWidth="2.5" />
+                      <line x1={colCenter} y1="206" x2={colCenter} y2="218" stroke="var(--win-text)" strokeWidth="2.5" />
 
                       {/* Level 1: GPHP Sirkit Akhir (MCB) */}
-                      <rect x={colCenter - 85} y="200" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#0284c7" strokeWidth="1.8" />
-                      <rect x={colCenter - 85} y="200" width="170" height="14" fill="#0284c7" />
-                      <text x={colCenter} y="210" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                      <rect x={colCenter - 95} y="218" width="190" height="48" rx="4" fill="var(--win-surface)" stroke="#0284c7" strokeWidth="1.8" />
+                      <rect x={colCenter - 95} y="218" width="190" height="15" rx="4" fill="#0284c7" />
+                      <text x={colCenter} y="229" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
                         1. GPHP SIRKIT AKHIR
                       </text>
-                      <text x={colCenter} y="226" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                      <text x={colCenter} y="246" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
                         MCB {motor.recommendedGphpBreaker} A
                       </text>
-                      <text x={colCenter} y="240" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
-                        Faktor {motor.startMethod.factor * 100}% × In ({motor.maxGphp}A)
+                      <text x={colCenter} y="259" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                        Faktor {motor.startMethod.factor * 100}% × In = {motor.maxGphp}A
                       </text>
 
-                      {/* Wire to Cable */}
-                      <line x1={colCenter} y1="234" x2={colCenter} y2="252" stroke="var(--win-text)" strokeWidth="2.5" />
+                      {/* Wire to Cable (Clean, no text crosses here!) */}
+                      <line x1={colCenter} y1="266" x2={colCenter} y2="280" stroke="var(--win-text)" strokeWidth="2.5" />
 
                       {/* Level 2: Penghantar Kabel Sirkit Akhir (125% In) */}
-                      <rect x={colCenter - 85} y="252" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#059669" strokeWidth="1.8" />
-                      <rect x={colCenter - 85} y="252" width="170" height="14" fill="#059669" />
-                      <text x={colCenter} y="262" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                      <rect x={colCenter - 95} y="280" width="190" height="48" rx="4" fill="var(--win-surface)" stroke="#059669" strokeWidth="1.8" />
+                      <rect x={colCenter - 95} y="280" width="190" height="15" rx="4" fill="#059669" />
+                      <text x={colCenter} y="291" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
                         2. KABEL PENGHANTAR (KHA)
                       </text>
-                      <text x={colCenter} y="278" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
-                        KHA ≥ {motor.khaBranch} A
+                      <text x={colCenter} y="308" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                        KHA ≥ {motor.khaBranch} A (125% In)
                       </text>
-                      <text x={colCenter} y="292" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                      <text x={colCenter} y="321" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
                         Kabel: {motor.cableRecommendation}
                       </text>
 
-                      {/* Wire to Overload TOR */}
-                      <line x1={colCenter} y1="286" x2={colCenter} y2="306" stroke="var(--win-text)" strokeWidth="2.5" />
+                      {/* Wire to Overload TOR (Clean, no text crosses here!) */}
+                      <line x1={colCenter} y1="328" x2={colCenter} y2="342" stroke="var(--win-text)" strokeWidth="2.5" />
 
                       {/* Level 3: Proteksi Beban Lebih (TOR) */}
-                      <rect x={colCenter - 85} y="306" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="1.8" />
-                      <rect x={colCenter - 85} y="306" width="170" height="14" fill="#b45309" />
-                      <text x={colCenter} y="316" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                      <rect x={colCenter - 95} y="342" width="190" height="48" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="1.8" />
+                      <rect x={colCenter - 95} y="342" width="190" height="15" rx="4" fill="#b45309" />
+                      <text x={colCenter} y="353" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
                         3. BEBAN LEBIH (TOR)
                       </text>
-                      <text x={colCenter} y="332" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                      <text x={colCenter} y="370" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
                         Setelan: {motor.torSetting} A
                       </text>
-                      <text x={colCenter} y="346" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                      <text x={colCenter} y="383" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
                         {Math.round(torFactor * 100)}% × In (Proteksi Termal)
                       </text>
 
-                      {/* Wire to Motor Unit */}
-                      <line x1={colCenter} y1="340" x2={colCenter} y2="362" stroke="var(--win-text)" strokeWidth="2.5" />
+                      {/* Wire to Motor Unit (Clean, no text crosses here!) */}
+                      <line x1={colCenter} y1="390" x2={colCenter} y2="404" stroke="var(--win-text)" strokeWidth="2.5" />
 
                       {/* Level 4: Motor Listrik & Grounding */}
                       <rect 
-                        x={colCenter - 95} 
-                        y="362" 
-                        width="190" 
-                        height="98" 
+                        x={colCenter - 110} 
+                        y="404" 
+                        width="220" 
+                        height="108" 
                         rx="6" 
                         fill="var(--win-surface)" 
                         stroke={isHighest ? '#d97706' : 'var(--win-border)'} 
@@ -595,33 +609,34 @@ export default function MotorCircuitCalculator() {
                       />
 
                       {/* Motor Circle Symbol */}
-                      <circle cx={colCenter - 52} cy="411" r="26" fill="var(--win-surface-alt)" stroke="#0284c7" strokeWidth="2.5" />
-                      <text x={colCenter - 52} y="407" textAnchor="middle" fill="var(--win-text)" fontSize="14" fontWeight="900">
+                      <circle cx={colCenter - 65} cy="458" r="26" fill="var(--win-surface-alt)" stroke="#0284c7" strokeWidth="2.5" />
+                      <text x={colCenter - 65} y="454" textAnchor="middle" fill="var(--win-text)" fontSize="14" fontWeight="900">
                         M
                       </text>
-                      <text x={colCenter - 52} y="423" textAnchor="middle" fill="var(--win-text)" fontSize="9" fontWeight="800">
+                      <text x={colCenter - 65} y="470" textAnchor="middle" fill="var(--win-text)" fontSize="9" fontWeight="800">
                         3 ~
                       </text>
 
                       {/* Motor Details */}
-                      <text x={colCenter - 14} y="384" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                      <text x={colCenter - 26} y="426" fill="var(--win-text)" fontSize="11.5" fontWeight="800">
                         {motor.name}
                       </text>
-                      <text x={colCenter - 14} y="402" fill="var(--win-accent)" fontSize="11" fontWeight="800">
-                        In = {motor.In} A
+                      <text x={colCenter - 26} y="444" fill="var(--win-accent)" fontSize="11" fontWeight="800">
+                        In = {motor.In} Ampere
                       </text>
-                      <text x={colCenter - 14} y="418" fill="var(--win-text-secondary)" fontSize="9" fontWeight="600">
+                      <text x={colCenter - 26} y="462" fill="var(--win-text-secondary)" fontSize="9" fontWeight="600">
                         {motor.typeDesc}
                       </text>
-                      <text x={colCenter - 14} y="432" fill="var(--win-text-muted)" fontSize="8" fontWeight="500">
-                        {motor.startMethod.name.split('-')[1] || motor.startMethod.name}
+                      <text x={colCenter - 26} y="478" fill="var(--win-text-muted)" fontSize="8.5" fontWeight="500">
+                        {getShortStartName(motor.startingMethodId)}
                       </text>
 
                       {/* Chassis Grounding Terminal (PE) */}
-                      <line x1={colCenter + 75} y1="411" x2={colCenter + 75} y2="437" stroke="#107c10" strokeWidth="2" />
-                      <line x1={colCenter + 68} y1="437" x2={colCenter + 82} y2="437" stroke="#107c10" strokeWidth="2" />
-                      <line x1={colCenter + 71} y1="441" x2={colCenter + 79} y2="441" stroke="#107c10" strokeWidth="1.5" />
-                      <text x={colCenter + 75} y="451" textAnchor="middle" fill="var(--win-success-text)" fontSize="7" fontWeight="800">
+                      <line x1={colCenter + 85} y1="444" x2={colCenter + 85} y2="472" stroke="#107c10" strokeWidth="2" />
+                      <line x1={colCenter + 77} y1="472" x2={colCenter + 93} y2="472" stroke="#107c10" strokeWidth="2" />
+                      <line x1={colCenter + 80} y1="476" x2={colCenter + 90} y2="476" stroke="#107c10" strokeWidth="1.5" />
+                      <line x1={colCenter + 83} y1="480" x2={colCenter + 87} y2="480" stroke="#107c10" strokeWidth="1" />
+                      <text x={colCenter + 85} y="492" textAnchor="middle" fill="var(--win-success-text)" fontSize="8" fontWeight="800">
                         PE
                       </text>
                     </g>
