@@ -143,72 +143,75 @@ function EarthingDiagram({ systemId }) {
   const isIT = systemId === 'IT';
 
   return (
-    <div className="w-full overflow-x-auto bg-slate-950/70 p-4 rounded border border-slate-800">
+    <div 
+      className="w-full overflow-x-auto p-4 rounded"
+      style={{ backgroundColor: 'var(--win-surface-alt)', border: '1px solid var(--win-border)' }}
+    >
       <svg viewBox="0 0 760 250" className="w-full min-w-[680px] h-auto font-sans select-none">
         {/* Background Ground Level Plane */}
-        <line x1="20" y1="210" x2="740" y2="210" stroke="#78716c" strokeWidth="2" strokeDasharray="6,4" />
-        <text x="380" y="225" textAnchor="middle" fill="#a8a29e" fontSize="10" fontWeight="600" letterSpacing="0.05em">
+        <line x1="20" y1="210" x2="740" y2="210" stroke="var(--win-input-border)" strokeWidth="1.5" strokeDasharray="6,4" />
+        <text x="380" y="226" textAnchor="middle" fill="var(--win-text)" fontSize="10" fontWeight="700" letterSpacing="0.08em">
           BUMI / PERMUKAAN TANAH
         </text>
 
         {/* ================= LEFT: TRAFO SUMBER (PLN / GARDU) ================= */}
-        <rect x="30" y="30" width="150" height="150" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke="#38bdf8" strokeWidth="1.5" />
-        <rect x="30" y="30" width="150" height="24" rx="4" fill="#0369a1" />
-        <text x="105" y="46" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700">
+        <rect x="30" y="30" width="150" height="150" rx="4" fill="var(--win-surface)" stroke="#0284c7" strokeWidth="2" />
+        <rect x="30" y="30" width="150" height="26" rx="4" fill="#0284c7" />
+        <text x="105" y="47" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="800">
           GARDU TRAFO SUMBER
         </text>
 
         {/* Windings / Symbols inside Trafo */}
-        <circle cx="85" cy="85" r="20" fill="none" stroke="#e0f2fe" strokeWidth="2" />
-        <circle cx="115" cy="85" r="20" fill="none" stroke="#e0f2fe" strokeWidth="2" />
-        <text x="100" y="125" textAnchor="middle" fill="#94a3b8" fontSize="10">Titik Bintang (N)</text>
+        <circle cx="85" cy="85" r="20" fill="none" stroke="var(--win-text)" strokeWidth="2.5" />
+        <circle cx="115" cy="85" r="20" fill="none" stroke="var(--win-text)" strokeWidth="2.5" />
+        <text x="100" y="125" textAnchor="middle" fill="var(--win-text)" fontSize="10" fontWeight="700">Titik Bintang (N)</text>
 
         {/* Source Earth Connection */}
         {isIT ? (
           <>
             {/* IT System: Isolated or High Impedance */}
-            <line x1="100" y1="135" x2="100" y2="150" stroke="#f59e0b" strokeWidth="2" />
-            <rect x="85" y="150" width="30" height="20" fill="#78350f" stroke="#f59e0b" strokeWidth="1.5" rx="2" />
-            <text x="100" y="164" textAnchor="middle" fill="#fef3c7" fontSize="10" fontWeight="700">Z</text>
-            <line x1="100" y1="170" x2="100" y2="210" stroke="#f59e0b" strokeWidth="2" />
+            <line x1="100" y1="135" x2="100" y2="150" stroke="#b45309" strokeWidth="2" />
+            <rect x="85" y="150" width="30" height="20" fill="#b45309" stroke="#78350f" strokeWidth="1.5" rx="2" />
+            <text x="100" y="164" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="800">Z</text>
+            <line x1="100" y1="170" x2="100" y2="210" stroke="#b45309" strokeWidth="2" />
             {/* Earth Symbol */}
-            <line x1="88" y1="210" x2="112" y2="210" stroke="#f59e0b" strokeWidth="2.5" />
-            <line x1="92" y1="214" x2="108" y2="214" stroke="#f59e0b" strokeWidth="2" />
-            <line x1="96" y1="218" x2="104" y2="218" stroke="#f59e0b" strokeWidth="1.5" />
-            <text x="100" y="235" textAnchor="middle" fill="#f59e0b" fontSize="9" fontWeight="700">Z ≥ 1000 Ω (Rb)</text>
+            <line x1="88" y1="210" x2="112" y2="210" stroke="#b45309" strokeWidth="2.5" />
+            <line x1="92" y1="214" x2="108" y2="214" stroke="#b45309" strokeWidth="2" />
+            <line x1="96" y1="218" x2="104" y2="218" stroke="#b45309" strokeWidth="1.5" />
+            <text x="100" y="235" textAnchor="middle" fill="var(--win-warning)" fontSize="9" fontWeight="700">Z ≥ 1000 Ω (Rb)</text>
           </>
         ) : (
           <>
             {/* Direct Earthing of Source Neutral (TT, TN-S, TN-C, TN-C-S) */}
-            <line x1="100" y1="135" x2="100" y2="210" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="100" y1="135" x2="100" y2="210" stroke="#107c10" strokeWidth="2.5" />
             {/* Earth Symbol */}
-            <line x1="88" y1="210" x2="112" y2="210" stroke="#10b981" strokeWidth="2.5" />
-            <line x1="92" y1="214" x2="108" y2="214" stroke="#10b981" strokeWidth="2" />
-            <line x1="96" y1="218" x2="104" y2="218" stroke="#10b981" strokeWidth="1.5" />
-            <text x="100" y="235" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="700">Rb (Tanah Trafo)</text>
+            <line x1="88" y1="210" x2="112" y2="210" stroke="#107c10" strokeWidth="2.5" />
+            <line x1="92" y1="214" x2="108" y2="214" stroke="#107c10" strokeWidth="2" />
+            <line x1="96" y1="218" x2="104" y2="218" stroke="#107c10" strokeWidth="1.5" />
+            <text x="100" y="235" textAnchor="middle" fill="var(--win-success-text)" fontSize="9" fontWeight="700">Rb (Tanah Trafo)</text>
           </>
         )}
 
         {/* Terminals on Source */}
-        <circle cx="180" cy="70" r="4" fill="#d97706" />
-        <text x="165" y="74" fill="#fde68a" fontSize="10" fontWeight="700">L</text>
+        <circle cx="180" cy="70" r="5" fill="#b45309" />
+        <text x="165" y="74" fill="var(--win-text)" fontSize="11" fontWeight="800">L</text>
 
-        <circle cx="180" cy="115" r="4" fill="#0284c7" />
-        <text x="165" y="119" fill="#bae6fd" fontSize="10" fontWeight="700">N</text>
+        <circle cx="180" cy="115" r="5" fill="#0284c7" />
+        <text x="165" y="119" fill="var(--win-text)" fontSize="11" fontWeight="800">N</text>
 
         {isTNS && (
           <>
-            <circle cx="180" cy="155" r="4" fill="#10b981" />
-            <text x="160" y="159" fill="#a7f3d0" fontSize="10" fontWeight="700">PE</text>
-            <line x1="100" y1="135" x2="180" y2="155" stroke="#10b981" strokeWidth="2" strokeDasharray="3,2" />
+            <circle cx="180" cy="155" r="5" fill="#107c10" />
+            <text x="160" y="159" fill="var(--win-text)" fontSize="11" fontWeight="800">PE</text>
+            <line x1="100" y1="135" x2="180" y2="155" stroke="#107c10" strokeWidth="2" strokeDasharray="3,2" />
           </>
         )}
 
         {/* ================= MIDDLE: CONDUCTOR WIRES ================= */}
         {/* Phase Wire L */}
-        <line x1="180" y1="70" x2="520" y2="70" stroke="#d97706" strokeWidth="3" />
-        <rect x="330" y="58" width="80" height="18" rx="2" fill="rgba(217, 119, 6, 0.2)" stroke="#d97706" strokeWidth="1" />
-        <text x="370" y="71" textAnchor="middle" fill="#fde68a" fontSize="10" fontWeight="700">Fasa (L)</text>
+        <line x1="180" y1="70" x2="520" y2="70" stroke="#b45309" strokeWidth="3" />
+        <rect x="330" y="58" width="80" height="20" rx="3" fill="#b45309" stroke="#78350f" strokeWidth="1" />
+        <text x="370" y="72" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">Fasa (L)</text>
 
         {/* Neutral / PEN Wires */}
         {isTNC ? (
@@ -216,67 +219,67 @@ function EarthingDiagram({ systemId }) {
           <>
             <line x1="180" y1="115" x2="520" y2="115" stroke="#059669" strokeWidth="3.5" />
             <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="8,6" />
-            <rect x="310" y="104" width="120" height="18" rx="2" fill="rgba(5, 150, 105, 0.2)" stroke="#059669" strokeWidth="1" />
-            <text x="370" y="117" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="700">Kawat PEN (N + PE)</text>
+            <rect x="295" y="104" width="150" height="20" rx="3" fill="#059669" stroke="#047857" strokeWidth="1" />
+            <text x="370" y="118" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">Kawat PEN (N + PE)</text>
           </>
         ) : isTNCS ? (
           /* TN-C-S Incoming PEN */
           <>
             <line x1="180" y1="115" x2="520" y2="115" stroke="#059669" strokeWidth="3.5" />
             <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="8,6" />
-            <rect x="295" y="104" width="150" height="18" rx="2" fill="rgba(5, 150, 105, 0.2)" stroke="#059669" strokeWidth="1" />
-            <text x="370" y="117" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="700">Distribusi Luar: Kawat PEN</text>
+            <rect x="285" y="104" width="170" height="20" rx="3" fill="#059669" stroke="#047857" strokeWidth="1" />
+            <text x="370" y="118" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">Distribusi Luar: Kawat PEN</text>
           </>
         ) : (
           /* Standard Neutral N */
           <>
             <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="3" />
-            <rect x="330" y="104" width="80" height="18" rx="2" fill="rgba(2, 132, 199, 0.2)" stroke="#0284c7" strokeWidth="1" />
-            <text x="370" y="117" textAnchor="middle" fill="#bae6fd" fontSize="10" fontWeight="700">Netral (N)</text>
+            <rect x="330" y="104" width="80" height="20" rx="3" fill="#0284c7" stroke="#0369a1" strokeWidth="1" />
+            <text x="370" y="118" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">Netral (N)</text>
           </>
         )}
 
         {/* Protective Earth PE Wire from Source (Only in TN-S) */}
         {isTNS && (
           <>
-            <line x1="180" y1="155" x2="520" y2="155" stroke="#10b981" strokeWidth="3" strokeDasharray="6,3" />
-            <rect x="315" y="144" width="110" height="18" rx="2" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" strokeWidth="1" />
-            <text x="370" y="157" textAnchor="middle" fill="#a7f3d0" fontSize="10" fontWeight="700">PE Terpisah (5-Kawat)</text>
+            <line x1="180" y1="155" x2="520" y2="155" stroke="#107c10" strokeWidth="3" strokeDasharray="6,3" />
+            <rect x="300" y="144" width="140" height="20" rx="3" fill="#107c10" stroke="#0e6b0e" strokeWidth="1" />
+            <text x="370" y="158" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">PE Terpisah (5-Kawat)</text>
           </>
         )}
 
         {isTT && (
-          <text x="370" y="160" textAnchor="middle" fill="#64748b" fontSize="10" fontStyle="italic">
+          <text x="370" y="165" textAnchor="middle" fill="var(--win-text)" fontSize="10" fontStyle="italic" fontWeight="700">
             (Tanpa Kawat Proteksi PE dari PLN - Pembumian Mandiri di Rumah)
           </text>
         )}
 
         {/* ================= RIGHT: INSTALASI KONSUMEN ================= */}
-        <rect x="520" y="30" width="210" height="155" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke={isTT ? '#10b981' : '#38bdf8'} strokeWidth="1.5" />
-        <rect x="520" y="30" width="210" height="24" rx="4" fill={isTT ? '#065f46' : '#1e3a5f'} />
-        <text x="625" y="46" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700">
+        <rect x="520" y="30" width="210" height="155" rx="4" fill="var(--win-surface)" stroke={isTT ? '#059669' : '#0284c7'} strokeWidth="2" />
+        <rect x="520" y="30" width="210" height="26" rx="4" fill={isTT ? '#059669' : '#0284c7'} />
+        <text x="625" y="47" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="800">
           {isTT ? 'RUMAH KONSUMEN (PLN)' : 'INSTALASI BEBAN KONSUMEN'}
         </text>
 
         {/* Consumer Appliance Box with Metallic Frame (BKT) */}
-        <rect x="590" y="65" width="125" height="85" rx="3" fill="rgba(30, 41, 59, 0.9)" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,2" />
-        <text x="652" y="82" textAnchor="middle" fill="#cbd5e1" fontSize="10" fontWeight="700">
+        <rect x="590" y="65" width="125" height="85" rx="3" fill="var(--win-surface-alt)" stroke="var(--win-border)" strokeWidth="2" strokeDasharray="4,2" />
+        <text x="652" y="83" textAnchor="middle" fill="var(--win-text)" fontSize="10" fontWeight="800">
           BEBAN / PERALATAN
         </text>
-        <text x="652" y="95" textAnchor="middle" fill="#94a3b8" fontSize="9">
+        <text x="652" y="97" textAnchor="middle" fill="var(--win-text)" fontSize="9" fontWeight="700">
           Bodi Logam (BKT)
         </text>
 
         {/* Internal load wiring */}
-        <line x1="520" y1="70" x2="610" y2="70" stroke="#d97706" strokeWidth="2.5" />
-        <circle cx="610" cy="70" r="3" fill="#d97706" />
+        <line x1="520" y1="70" x2="610" y2="70" stroke="#b45309" strokeWidth="2.5" />
+        <circle cx="610" cy="70" r="3" fill="#b45309" />
 
         {isTT && (
           <>
             {/* RCD 30mA Box in TT */}
-            <rect x="535" y="58" width="40" height="68" rx="2" fill="#047857" stroke="#34d399" strokeWidth="1.5" />
-            <text x="555" y="88" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="800">RCD</text>
-            <text x="555" y="100" textAnchor="middle" fill="#a7f3d0" fontSize="8">30mA</text>
+            <rect x="535" y="58" width="42" height="68" rx="2" fill="#047857" stroke="#34d399" strokeWidth="1.5" />
+            <text x="556" y="88" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="800">RCD</text>
+            <text x="556" y="101" textAnchor="middle" fill="#e6fffa" fontSize="8" fontWeight="700">30mA</text>
           </>
         )}
 
@@ -286,27 +289,27 @@ function EarthingDiagram({ systemId }) {
             <line x1="520" y1="115" x2="610" y2="115" stroke="#059669" strokeWidth="2.5" />
             <circle cx="610" cy="115" r="3" fill="#059669" />
             {/* Jumper PEN directly to chassis in TN-C */}
-            <line x1="610" y1="115" x2="610" y2="140" stroke="#10b981" strokeWidth="2.5" />
-            <line x1="610" y1="140" x2="650" y2="140" stroke="#10b981" strokeWidth="2.5" />
-            <text x="660" y="135" fill="#f87171" fontSize="8" fontWeight="700">Jumper Bodi</text>
+            <line x1="610" y1="115" x2="610" y2="140" stroke="#107c10" strokeWidth="2.5" />
+            <line x1="610" y1="140" x2="650" y2="140" stroke="#107c10" strokeWidth="2.5" />
+            <text x="660" y="135" fill="var(--win-danger)" fontSize="8" fontWeight="700">Jumper Bodi</text>
           </>
         ) : isTNCS ? (
           <>
             {/* Split PEN into N and PE at Main Panel */}
             <line x1="520" y1="115" x2="545" y2="115" stroke="#059669" strokeWidth="3" />
-            <circle cx="545" cy="115" r="4" fill="#f59e0b" />
-            <text x="545" y="106" textAnchor="middle" fill="#fbbf24" fontSize="8" fontWeight="800">SPLIT</text>
+            <circle cx="545" cy="115" r="4" fill="#b45309" />
+            <text x="545" y="106" textAnchor="middle" fill="var(--win-text)" fontSize="8" fontWeight="800">SPLIT</text>
             {/* Neutral to load */}
             <line x1="545" y1="115" x2="610" y2="115" stroke="#0284c7" strokeWidth="2.5" />
             {/* PE bus to chassis */}
-            <line x1="545" y1="115" x2="545" y2="155" stroke="#10b981" strokeWidth="2.5" />
-            <line x1="545" y1="155" x2="650" y2="155" stroke="#10b981" strokeWidth="2.5" />
-            <line x1="650" y1="155" x2="650" y2="150" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="545" y1="115" x2="545" y2="155" stroke="#107c10" strokeWidth="2.5" />
+            <line x1="545" y1="155" x2="650" y2="155" stroke="#107c10" strokeWidth="2.5" />
+            <line x1="650" y1="155" x2="650" y2="150" stroke="#107c10" strokeWidth="2.5" />
             {/* Auxiliary Earth Rod for TN-C-S */}
-            <line x1="545" y1="155" x2="545" y2="210" stroke="#10b981" strokeWidth="2" />
-            <line x1="535" y1="210" x2="555" y2="210" stroke="#10b981" strokeWidth="2" />
-            <line x1="538" y1="214" x2="552" y2="214" stroke="#10b981" strokeWidth="1.5" />
-            <text x="545" y="226" textAnchor="middle" fill="#10b981" fontSize="8">Ra Bantu</text>
+            <line x1="545" y1="155" x2="545" y2="210" stroke="#107c10" strokeWidth="2" />
+            <line x1="535" y1="210" x2="555" y2="210" stroke="#107c10" strokeWidth="2" />
+            <line x1="538" y1="214" x2="552" y2="214" stroke="#107c10" strokeWidth="1.5" />
+            <text x="545" y="226" textAnchor="middle" fill="var(--win-success-text)" fontSize="8" fontWeight="700">Ra Bantu</text>
           </>
         ) : (
           <>
@@ -318,13 +321,13 @@ function EarthingDiagram({ systemId }) {
         {/* Chassis Grounding to Ground Rod (TT and IT) */}
         {(isTT || isIT) && (
           <>
-            <line x1="650" y1="150" x2="650" y2="210" stroke="#10b981" strokeWidth="3" />
-            <circle cx="650" cy="150" r="3.5" fill="#10b981" />
+            <line x1="650" y1="150" x2="650" y2="210" stroke="#107c10" strokeWidth="3" />
+            <circle cx="650" cy="150" r="3.5" fill="#107c10" />
             {/* Earth Rod Symbol */}
-            <line x1="638" y1="210" x2="662" y2="210" stroke="#10b981" strokeWidth="3" />
-            <line x1="642" y1="214" x2="658" y2="214" stroke="#10b981" strokeWidth="2" />
-            <line x1="646" y1="218" x2="654" y2="218" stroke="#10b981" strokeWidth="1.5" />
-            <text x="650" y="235" textAnchor="middle" fill="#34d399" fontSize="9" fontWeight="700">
+            <line x1="638" y1="210" x2="662" y2="210" stroke="#107c10" strokeWidth="3" />
+            <line x1="642" y1="214" x2="658" y2="214" stroke="#107c10" strokeWidth="2" />
+            <line x1="646" y1="218" x2="654" y2="218" stroke="#107c10" strokeWidth="1.5" />
+            <text x="650" y="235" textAnchor="middle" fill="var(--win-success-text)" fontSize="9" fontWeight="700">
               {isTT ? 'Ra ≤ 5 Ω (Pasak Lokal)' : 'Ra Mandiri (Lokal)'}
             </text>
           </>
@@ -333,10 +336,10 @@ function EarthingDiagram({ systemId }) {
         {/* TN-S chassis connection to PE wire */}
         {isTNS && (
           <>
-            <line x1="520" y1="155" x2="650" y2="155" stroke="#10b981" strokeWidth="2.5" />
-            <line x1="650" y1="155" x2="650" y2="150" stroke="#10b981" strokeWidth="2.5" />
-            <circle cx="650" cy="150" r="3.5" fill="#10b981" />
-            <text x="650" y="170" textAnchor="middle" fill="#34d399" fontSize="8" fontWeight="600">
+            <line x1="520" y1="155" x2="650" y2="155" stroke="#107c10" strokeWidth="2.5" />
+            <line x1="650" y1="155" x2="650" y2="150" stroke="#107c10" strokeWidth="2.5" />
+            <circle cx="650" cy="150" r="3.5" fill="#107c10" />
+            <text x="650" y="172" textAnchor="middle" fill="var(--win-success-text)" fontSize="8" fontWeight="700">
               Kembali ke N via PE
             </text>
           </>

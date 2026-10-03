@@ -65,14 +65,14 @@
   --win-success: #107c10;
   --win-success-text: #0e6b0e;
   --win-warning: #d83b01;
-  --win-warning-text: #a80000;
+  --win-warning-text: #8a2400;
   --win-danger: #d13438;
   --win-danger-text: #a80000;
 
   --win-text: #111111;
-  --win-text-secondary: #333333;
-  --win-text-muted: #666666;
-  --win-text-disabled: #999999;
+  --win-text-secondary: #2b2b2b;
+  --win-text-muted: #4a4a4a;
+  --win-text-disabled: #767676;
 }
 
 /* Base Reset */
@@ -1023,20 +1023,102 @@ button {
 .text-red-400 { color: var(--win-danger-text); }
 .text-red-500 { color: var(--win-danger); }
 
-/* In Light mode, make sure text-white is dark! */
+/* ==========================================================================
+   LIGHT MODE CONTRAST & ACCESSIBILITY (WCAG AAA)
+   ========================================================================== */
 [data-theme="light"] .text-white {
   color: var(--win-text) !important;
 }
+
+/* Ensure solid primary buttons and badges always keep crisp white text */
+[data-theme="light"] .win10-btn-primary,
+[data-theme="light"] .win10-btn-primary *,
+[data-theme="light"] .win10-badge-accent,
+[data-theme="light"] .win10-badge-success,
+[data-theme="light"] .win10-badge-danger {
+  color: #ffffff !important;
+}
+
+/* Slate background cards adapt to light mode surface */
 [data-theme="light"] .bg-slate-900,
 [data-theme="light"] .bg-slate-950,
-[data-theme="light"] .bg-slate-800 {
+[data-theme="light"] .bg-slate-800,
+[data-theme="light"] [class*="bg-slate-"] {
   background-color: var(--win-surface-alt) !important;
   border-color: var(--win-border) !important;
   color: var(--win-text) !important;
 }
-[data-theme="light"] .text-slate-300,
-[data-theme="light"] .text-slate-400 {
+
+[data-theme="light"] [class*="border-slate-"] {
+  border-color: var(--win-border) !important;
+}
+
+/* Crisp readable text colors in Light Mode */
+[data-theme="light"] .text-slate-300 {
   color: var(--win-text-secondary) !important;
+}
+[data-theme="light"] .text-slate-400 {
+  color: var(--win-text-muted) !important;
+}
+[data-theme="light"] .text-slate-500 {
+  color: var(--win-text-muted) !important;
+}
+
+/* High-contrast status and wire colors on light backgrounds */
+[data-theme="light"] .text-amber-300,
+[data-theme="light"] .text-amber-400,
+[data-theme="light"] .text-amber-500,
+[data-theme="light"] .text-yellow-400,
+[data-theme="light"] .text-yellow-500 {
+  color: #92400e !important; /* Deep contrast amber/brown, WCAG AAA */
+}
+
+[data-theme="light"] .text-sky-300,
+[data-theme="light"] .text-sky-400,
+[data-theme="light"] .text-sky-500,
+[data-theme="light"] .text-blue-400 {
+  color: #0066b2 !important; /* Deep accessible Windows 10 blue, WCAG AAA */
+}
+
+[data-theme="light"] .text-emerald-300,
+[data-theme="light"] .text-emerald-400,
+[data-theme="light"] .text-emerald-500,
+[data-theme="light"] .text-green-400 {
+  color: #0e6b0e !important; /* Deep accessible green, WCAG AAA */
+}
+
+[data-theme="light"] .text-red-400,
+[data-theme="light"] .text-red-500 {
+  color: #c42b1c !important; /* High-contrast red */
+}
+
+/* Light mode tinted boxes */
+[data-theme="light"] [class*="bg-amber-9"],
+[data-theme="light"] [class*="bg-amber-500/1"],
+[data-theme="light"] [class*="bg-amber-500/2"] {
+  background-color: #fffbeb !important;
+  border-color: #fcd34d !important;
+}
+
+[data-theme="light"] [class*="bg-sky-9"],
+[data-theme="light"] [class*="bg-sky-500/1"],
+[data-theme="light"] [class*="bg-sky-500/2"] {
+  background-color: #f0f9ff !important;
+  border-color: #bae6fd !important;
+}
+
+[data-theme="light"] [class*="bg-emerald-9"],
+[data-theme="light"] [class*="bg-emerald-500/1"],
+[data-theme="light"] [class*="bg-emerald-500/2"] {
+  background-color: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+}
+
+[data-theme="light"] [class*="bg-red-9"],
+[data-theme="light"] [class*="bg-red-500/1"],
+[data-theme="light"] [class*="bg-red-500/2"] {
+  background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
 }
 
 /* Windows 10 Checkbox */
