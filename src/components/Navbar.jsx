@@ -49,7 +49,7 @@ export default function Navbar({ activeTab, setActiveTab }) {
           </button>
 
           <a
-            href="https://github.com"
+            href="https://github.com/wldn-git/puil-master"
             target="_blank"
             rel="noopener noreferrer"
             title="GitHub Repository"
