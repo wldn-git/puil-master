@@ -258,6 +258,17 @@ export default function GroundingCalculator() {
               </ul>
             </div>
 
+            {/* TT System Connection Note */}
+            <div className="p-3.5 rounded bg-slate-900/80 border border-sky-500/30 text-xs text-slate-300 space-y-1.5">
+              <span className="font-bold text-sky-400 flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5" />
+                Sistem Pembumian TT di Rumah Tinggal Indonesia:
+              </span>
+              <p className="text-[11px] leading-relaxed text-slate-300">
+                PLN di Indonesia menerapkan <strong>Sistem TT (Terra-Terra)</strong>. Nilai tahanan pasak tanah elektroda lokal (Ra &le; 5 &Omega;) yang dihitung di atas <strong>wajib dipasangkan dengan GPAS / RCD 30 mA</strong> pada panel hubung bagi (PHB) untuk menjamin pemutusan arus bocor sebelum membahayakan nyawa manusia.
+              </p>
+            </div>
+
           </div>
         </div>
 

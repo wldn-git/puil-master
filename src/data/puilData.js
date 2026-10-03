@@ -367,3 +367,127 @@ export const INSPECTION_CHECKLIST = [
     ]
   }
 ];
+
+// Data Sistem Pembumian Distribusi Tenaga Listrik (PUIL 2011 Bagian 312.2 / IEC 60364)
+export const EARTHING_SYSTEMS = [
+  {
+    id: 'TT',
+    name: 'Sistem TT',
+    fullName: 'Terra - Terra (Pembumian Sumber dan Konsumen Mandiri Terpisah)',
+    codeMeaning: {
+      first: 'T (Terre): Titik netral trafo sumber dibumikan langsung ke tanah.',
+      second: 'T (Terre): Bagian Konduktif Terbuka (BKT) / bodi peralatan konsumen dibumikan ke elektroda lokal mandiri.'
+    },
+    isIndonesiaPlnStandard: true,
+    badgeText: 'Standar Resmi PLN Rumah Tinggal',
+    summary: 'Sistem resmi di Indonesia untuk instalasi rumah tinggal dan pelanggan tegangan rendah PLN. Titik netral trafo PLN dibumikan di gardu, sedangkan instalasi rumah memiliki elektroda tanah (ground rod) sendiri tanpa tersambung ke kawat netral PLN.',
+    conductors: '1-Fasa: 3 kawat (L, N, PE) atau 3-Fasa: 4/5 kawat (L1, L2, L3, N, PE lokal)',
+    protectionRequired: 'WAJIB pasang GPAS / RCD / ELCB (≤ 30 mA). Karena tahanan tanah elektroda lokal (Ra) membatasi arus hubung singkat tanah sehingga MCB seringkali tidak cukup cepat memutus arus gangguan.',
+    advantages: [
+      'Sangat sederhana bagi penyedia listrik (PLN tidak perlu menarik kabel proteksi PE ke pelanggan).',
+      'Tidak ada risiko bahaya tegangan sentuh akibat kawat PEN putus dari jaringan luar.',
+      'Sangat efektif mengisolasi gangguan antar pelanggan yang berdampingan.'
+    ],
+    disadvantages: [
+      'Nilai tahanan tanah lokal (Ra) harus dijaga ketat (PUIL: ≤ 5 Ohm).',
+      'MCB tidak dapat diandalkan sebagai proteksi sengatan arus bocor tanah; WAJIB menggunakan RCD/GPAS.'
+    ],
+    applications: 'Instalasi pelanggan tegangan rendah PLN (rumah tinggal, ruko, kantor kecil di seluruh Indonesia).'
+  },
+  {
+    id: 'TN-S',
+    name: 'Sistem TN-S',
+    fullName: 'Terra Neutral - Separated (Netral & Proteksi Dipisah Total)',
+    codeMeaning: {
+      first: 'T (Terre): Titik netral sumber dibumikan langsung ke tanah.',
+      second: 'N (Neutre): Bodi peralatan dihubungkan langsung ke titik netral sistem penyedia melalui kawat PE.',
+      third: 'S (Séparé): Kawat Netral (N) dan Kawat Proteksi (PE) dipisah secara permanen di seluruh jaringan.'
+    },
+    isIndonesiaPlnStandard: false,
+    badgeText: 'Paling Bersih (Bebas Noise & EMC)',
+    summary: 'Kawat Netral (N) dan Kawat Proteksi Ground (PE) terpisah 100% dari gardu trafo sampai ke titik beban konsumen. Arus beban balik hanya mengalir di kawat N, sedangkan kawat PE selalu berarus nol pada kondisi normal.',
+    conductors: '1-Fasa: 3 kawat (L, N, PE) | 3-Fasa: 5 kawat (L1, L2, L3, N, PE)',
+    protectionRequired: 'MCB / Sekring dan RCD / GPAS dapat bekerja sangat presisi dan cepat karena arus gangguan tanah memiliki impedansi loop yang sangat rendah (arus gangguan tinggi).',
+    advantages: [
+      'Paling aman terhadap interferensi elektromagnetik (EMC), ideal untuk perangkat sensitif audio, telekomunikasi, dan server data center.',
+      'RCD/GPAS dapat dipasang di seluruh titik tanpa kendala arus sisa palsu.',
+      'Bodi peralatan berada pada potensial netral sumber yang stabil.'
+    ],
+    disadvantages: [
+      'Biaya kabel paling tinggi karena membutuhkan kabel berinti 5 (penghantar terpisah sepanjang instalasi).'
+    ],
+    applications: 'Pusat data (Data Center), rumah sakit modern, studio audio/broadcasting, gedung perkantoran kelas tinggi dengan trafo privat.'
+  },
+  {
+    id: 'TN-C-S',
+    name: 'Sistem TN-C-S',
+    fullName: 'Terra Neutral - Combined lalu Separated (PME / Protective Multiple Earthing)',
+    codeMeaning: {
+      first: 'T (Terre): Titik netral trafo dibumikan langsung.',
+      second: 'N (Neutre): Bodi peralatan terhubung ke netral.',
+      third: 'C-S: Dari trafo ke batas bangunan menggunakan kawat gabungan (PEN), lalu di PDB bangunan dipecah menjadi PE dan N terpisah.'
+    },
+    isIndonesiaPlnStandard: false,
+    badgeText: 'Populer di Luar Negeri (PME)',
+    summary: 'Di jaringan distribusi PLN/penyedia luar memakai 4 kawat dengan penghantar gabungan PEN (TN-C). Begitu masuk ke Panel Distribusi Utama (PDB) gedung konsumen, kawat PEN dibumikan ulang ke elektroda tanah lalu dipecah permanen menjadi kawat Netral (N) dan kawat Ground (PE). Setelah dipisah, N dan PE DILARANG keras disambung kembali.',
+    conductors: 'Sisi Distribusi: PEN (4 kawat) | Sisi Dalam Gedung: N + PE (5 kawat)',
+    protectionRequired: 'MCB / Sekring untuk proteksi arus lebih, RCD/GPAS HANYA boleh dipasang di sisi instalasi dalam setelah titik pemisahan N dan PE.',
+    advantages: [
+      'Hemat biaya pada jaringan kabel distribusi luar, namun tetap memberikan keamanan TN-S di dalam gedung.',
+      'Arus gangguan tanah tinggi sehingga MCB dapat trip cepat.'
+    ],
+    disadvantages: [
+      'Jika kabel PEN distribusi di luar putus, bodi logam seluruh peralatan di dalam gedung bisa bertegangan fasa berbahaya.',
+      'Memerlukan elektroda pembumian ulang (multiple earthing) yang sangat andal di panel utama.'
+    ],
+    applications: 'Gedung komersial, pabrik industri, perumahan di negara-negara Eropa/Inggris/Australia (sistem PME).'
+  },
+  {
+    id: 'TN-C',
+    name: 'Sistem TN-C',
+    fullName: 'Terra Neutral - Combined (Netral & Proteksi Digabung dalam Kawat PEN)',
+    codeMeaning: {
+      first: 'T (Terre): Titik netral sumber dibumikan langsung.',
+      second: 'N (Neutre): Bodi peralatan dihubungkan ke titik pembumian sistem melalui konduktor PEN.',
+      third: 'C (Combiné): Fungsi kawat Netral dan Proteksi disatukan menjadi satu kawat tunggal (PEN).'
+    },
+    isIndonesiaPlnStandard: false,
+    badgeText: 'Khusus Saluran Utama (Bukan Sirkit Akhir)',
+    summary: 'Kawat Netral dan Proteksi digabung menjadi satu kabel yaitu PEN (Protective Earth and Neutral) di seluruh sistem. Hanya menggunakan 4 kawat untuk 3 fasa.',
+    conductors: '3-Fasa: 4 kawat (L1, L2, L3, PEN). Tidak ada kabel PE terpisah.',
+    protectionRequired: 'DILARANG KERAS MEMASANG RCD / GPAS pada konduktor PEN! Karena jika RCD memutus kawat PEN, seluruh bodi peralatan akan mengapung ke tegangan fasa dan menyengat fatal siapa pun yang menyentuhnya. Penampang kawat PEN wajib minimal 10 mm² tembaga atau 16 mm² aluminium (PUIL Bagian 543.4).',
+    advantages: [
+      'Biaya paling murah (menghemat 1 jalur konduktor kabel pada jaringan tegangan rendah).'
+    ],
+    disadvantages: [
+      'Dilarang untuk sirkit akhir konsumen dan beban satu fasa kecil.',
+      'Resiko kebakaran dan sengatan maut jika kabel PEN putus/kendur.',
+      'Tingkat gangguan elektromagnetik (EMC noise) tinggi karena arus netral mengalir di jalur proteksi bodi.'
+    ],
+    applications: 'Jaringan transmisi/distribusi utama hulu, feeder antar gardu listrik (tidak boleh digunakan pada sirkit stop kontak rumah tinggal).'
+  },
+  {
+    id: 'IT',
+    name: 'Sistem IT',
+    fullName: 'Impedance / Isolated - Terra (Titik Netral Mengambang / Melalui Impedansi)',
+    codeMeaning: {
+      first: 'I (Isolé): Titik netral trafo tidak dibumikan langsung (diisolasi atau dihubungkan lewat impedansi tinggi 1000 - 2000 Ohm).',
+      second: 'T (Terre): Bagian Konduktif Terbuka (BKT) / bodi beban dibumikan secara mandiri ke tanah.'
+    },
+    isIndonesiaPlnStandard: false,
+    badgeText: 'Vital (Ruang Operasi RS / Fasilitas Tanpa Padam)',
+    summary: 'Sistem khusus di mana suplai trafo tidak dibumikan langsung. Saat terjadi gangguan fasa ke bodi/tanah pertama, arus bocor yang mengalir SANGAT KECIL (hanya beberapa miliamper) sehingga sistem TIDAK AKAN TRIP / PADAM, dan peralatan vital tetap menyala normal.',
+    conductors: '3-Fasa 3-kawat atau 4-kawat dengan isolasi termonitor.',
+    protectionRequired: 'WAJIB dilengkapi Insulation Monitoring Device (IMD / Perangkat Pemantau Isolasi) yang membunyikan alarm suara/lampu saat terjadi kegagalan isolasi pertama, agar teknisi segera memperbaiki sebelum terjadi gangguan fasa kedua.',
+    advantages: [
+      'Kontinuitas suplai listrik tertinggi (tidak terjadi pemadaman mendadak saat gangguan tanah pertama).',
+      'Arus gangguan pertama sangat kecil sehingga tidak menimbulkan percikan api atau sengatan listrik berbahaya.'
+    ],
+    disadvantages: [
+      'Biaya pemasangan dan peralatan pemantau isolasi (IMD) sangat mahal.',
+      'Memerlukan teknisi ahli berlisensi untuk pemeliharaan rutin segera setelah alarm IMD berbunyi.'
+    ],
+    applications: 'Ruang Operasi Rumah Sakit (Instalasi Kamar Bedah / ICU - PUIL Bagian 710), tambang bawah tanah rawan ledakan gas, kapal laut, ruang kontrol reaktor kimia.'
+  }
+];
+

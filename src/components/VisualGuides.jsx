@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   WIRE_COLOR_COMPARISON, 
-  BATHROOM_ZONES 
+  BATHROOM_ZONES,
+  EARTHING_SYSTEMS
 } from '../data/puilData';
 import { 
   Palette, 
@@ -13,8 +14,16 @@ import {
   Cpu,
   Search,
   SlidersHorizontal,
-  Info
+  Info,
+  Zap,
+  Globe,
+  Activity,
+  ArrowRight,
+  Layers,
+  HelpCircle,
+  BookOpen
 } from 'lucide-react';
+
 
 // Data Lengkap Digit 1 (Benda Padat & Debu) - SNI IEC 60529
 const IP_FIRST_DIGIT = {
@@ -125,10 +134,223 @@ const POPULAR_IP_LIST = [
   }
 ];
 
+// SVG Diagram Interaktif untuk Sistem Pembumian Listrik (TT, TN-S, TN-C-S, TN-C, IT)
+function EarthingDiagram({ systemId }) {
+  const isTT = systemId === 'TT';
+  const isTNS = systemId === 'TN-S';
+  const isTNCS = systemId === 'TN-C-S';
+  const isTNC = systemId === 'TN-C';
+  const isIT = systemId === 'IT';
+
+  return (
+    <div className="w-full overflow-x-auto bg-slate-950/70 p-4 rounded border border-slate-800">
+      <svg viewBox="0 0 760 250" className="w-full min-w-[680px] h-auto font-sans select-none">
+        {/* Background Ground Level Plane */}
+        <line x1="20" y1="210" x2="740" y2="210" stroke="#78716c" strokeWidth="2" strokeDasharray="6,4" />
+        <text x="380" y="225" textAnchor="middle" fill="#a8a29e" fontSize="10" fontWeight="600" letterSpacing="0.05em">
+          BUMI / PERMUKAAN TANAH
+        </text>
+
+        {/* ================= LEFT: TRAFO SUMBER (PLN / GARDU) ================= */}
+        <rect x="30" y="30" width="150" height="150" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke="#38bdf8" strokeWidth="1.5" />
+        <rect x="30" y="30" width="150" height="24" rx="4" fill="#0369a1" />
+        <text x="105" y="46" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700">
+          GARDU TRAFO SUMBER
+        </text>
+
+        {/* Windings / Symbols inside Trafo */}
+        <circle cx="85" cy="85" r="20" fill="none" stroke="#e0f2fe" strokeWidth="2" />
+        <circle cx="115" cy="85" r="20" fill="none" stroke="#e0f2fe" strokeWidth="2" />
+        <text x="100" y="125" textAnchor="middle" fill="#94a3b8" fontSize="10">Titik Bintang (N)</text>
+
+        {/* Source Earth Connection */}
+        {isIT ? (
+          <>
+            {/* IT System: Isolated or High Impedance */}
+            <line x1="100" y1="135" x2="100" y2="150" stroke="#f59e0b" strokeWidth="2" />
+            <rect x="85" y="150" width="30" height="20" fill="#78350f" stroke="#f59e0b" strokeWidth="1.5" rx="2" />
+            <text x="100" y="164" textAnchor="middle" fill="#fef3c7" fontSize="10" fontWeight="700">Z</text>
+            <line x1="100" y1="170" x2="100" y2="210" stroke="#f59e0b" strokeWidth="2" />
+            {/* Earth Symbol */}
+            <line x1="88" y1="210" x2="112" y2="210" stroke="#f59e0b" strokeWidth="2.5" />
+            <line x1="92" y1="214" x2="108" y2="214" stroke="#f59e0b" strokeWidth="2" />
+            <line x1="96" y1="218" x2="104" y2="218" stroke="#f59e0b" strokeWidth="1.5" />
+            <text x="100" y="235" textAnchor="middle" fill="#f59e0b" fontSize="9" fontWeight="700">Z ≥ 1000 Ω (Rb)</text>
+          </>
+        ) : (
+          <>
+            {/* Direct Earthing of Source Neutral (TT, TN-S, TN-C, TN-C-S) */}
+            <line x1="100" y1="135" x2="100" y2="210" stroke="#10b981" strokeWidth="2.5" />
+            {/* Earth Symbol */}
+            <line x1="88" y1="210" x2="112" y2="210" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="92" y1="214" x2="108" y2="214" stroke="#10b981" strokeWidth="2" />
+            <line x1="96" y1="218" x2="104" y2="218" stroke="#10b981" strokeWidth="1.5" />
+            <text x="100" y="235" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="700">Rb (Tanah Trafo)</text>
+          </>
+        )}
+
+        {/* Terminals on Source */}
+        <circle cx="180" cy="70" r="4" fill="#d97706" />
+        <text x="165" y="74" fill="#fde68a" fontSize="10" fontWeight="700">L</text>
+
+        <circle cx="180" cy="115" r="4" fill="#0284c7" />
+        <text x="165" y="119" fill="#bae6fd" fontSize="10" fontWeight="700">N</text>
+
+        {isTNS && (
+          <>
+            <circle cx="180" cy="155" r="4" fill="#10b981" />
+            <text x="160" y="159" fill="#a7f3d0" fontSize="10" fontWeight="700">PE</text>
+            <line x1="100" y1="135" x2="180" y2="155" stroke="#10b981" strokeWidth="2" strokeDasharray="3,2" />
+          </>
+        )}
+
+        {/* ================= MIDDLE: CONDUCTOR WIRES ================= */}
+        {/* Phase Wire L */}
+        <line x1="180" y1="70" x2="520" y2="70" stroke="#d97706" strokeWidth="3" />
+        <rect x="330" y="58" width="80" height="18" rx="2" fill="rgba(217, 119, 6, 0.2)" stroke="#d97706" strokeWidth="1" />
+        <text x="370" y="71" textAnchor="middle" fill="#fde68a" fontSize="10" fontWeight="700">Fasa (L)</text>
+
+        {/* Neutral / PEN Wires */}
+        {isTNC ? (
+          /* PEN Wire */
+          <>
+            <line x1="180" y1="115" x2="520" y2="115" stroke="#059669" strokeWidth="3.5" />
+            <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="8,6" />
+            <rect x="310" y="104" width="120" height="18" rx="2" fill="rgba(5, 150, 105, 0.2)" stroke="#059669" strokeWidth="1" />
+            <text x="370" y="117" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="700">Kawat PEN (N + PE)</text>
+          </>
+        ) : isTNCS ? (
+          /* TN-C-S Incoming PEN */
+          <>
+            <line x1="180" y1="115" x2="520" y2="115" stroke="#059669" strokeWidth="3.5" />
+            <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="1.5" strokeDasharray="8,6" />
+            <rect x="295" y="104" width="150" height="18" rx="2" fill="rgba(5, 150, 105, 0.2)" stroke="#059669" strokeWidth="1" />
+            <text x="370" y="117" textAnchor="middle" fill="#6ee7b7" fontSize="10" fontWeight="700">Distribusi Luar: Kawat PEN</text>
+          </>
+        ) : (
+          /* Standard Neutral N */
+          <>
+            <line x1="180" y1="115" x2="520" y2="115" stroke="#0284c7" strokeWidth="3" />
+            <rect x="330" y="104" width="80" height="18" rx="2" fill="rgba(2, 132, 199, 0.2)" stroke="#0284c7" strokeWidth="1" />
+            <text x="370" y="117" textAnchor="middle" fill="#bae6fd" fontSize="10" fontWeight="700">Netral (N)</text>
+          </>
+        )}
+
+        {/* Protective Earth PE Wire from Source (Only in TN-S) */}
+        {isTNS && (
+          <>
+            <line x1="180" y1="155" x2="520" y2="155" stroke="#10b981" strokeWidth="3" strokeDasharray="6,3" />
+            <rect x="315" y="144" width="110" height="18" rx="2" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" strokeWidth="1" />
+            <text x="370" y="157" textAnchor="middle" fill="#a7f3d0" fontSize="10" fontWeight="700">PE Terpisah (5-Kawat)</text>
+          </>
+        )}
+
+        {isTT && (
+          <text x="370" y="160" textAnchor="middle" fill="#64748b" fontSize="10" fontStyle="italic">
+            (Tanpa Kawat Proteksi PE dari PLN - Pembumian Mandiri di Rumah)
+          </text>
+        )}
+
+        {/* ================= RIGHT: INSTALASI KONSUMEN ================= */}
+        <rect x="520" y="30" width="210" height="155" rx="4" fill="rgba(15, 23, 42, 0.85)" stroke={isTT ? '#10b981' : '#38bdf8'} strokeWidth="1.5" />
+        <rect x="520" y="30" width="210" height="24" rx="4" fill={isTT ? '#065f46' : '#1e3a5f'} />
+        <text x="625" y="46" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="700">
+          {isTT ? 'RUMAH KONSUMEN (PLN)' : 'INSTALASI BEBAN KONSUMEN'}
+        </text>
+
+        {/* Consumer Appliance Box with Metallic Frame (BKT) */}
+        <rect x="590" y="65" width="125" height="85" rx="3" fill="rgba(30, 41, 59, 0.9)" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4,2" />
+        <text x="652" y="82" textAnchor="middle" fill="#cbd5e1" fontSize="10" fontWeight="700">
+          BEBAN / PERALATAN
+        </text>
+        <text x="652" y="95" textAnchor="middle" fill="#94a3b8" fontSize="9">
+          Bodi Logam (BKT)
+        </text>
+
+        {/* Internal load wiring */}
+        <line x1="520" y1="70" x2="610" y2="70" stroke="#d97706" strokeWidth="2.5" />
+        <circle cx="610" cy="70" r="3" fill="#d97706" />
+
+        {isTT && (
+          <>
+            {/* RCD 30mA Box in TT */}
+            <rect x="535" y="58" width="40" height="68" rx="2" fill="#047857" stroke="#34d399" strokeWidth="1.5" />
+            <text x="555" y="88" textAnchor="middle" fill="#ffffff" fontSize="9" fontWeight="800">RCD</text>
+            <text x="555" y="100" textAnchor="middle" fill="#a7f3d0" fontSize="8">30mA</text>
+          </>
+        )}
+
+        {/* Consumer Neutral connection */}
+        {isTNC ? (
+          <>
+            <line x1="520" y1="115" x2="610" y2="115" stroke="#059669" strokeWidth="2.5" />
+            <circle cx="610" cy="115" r="3" fill="#059669" />
+            {/* Jumper PEN directly to chassis in TN-C */}
+            <line x1="610" y1="115" x2="610" y2="140" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="610" y1="140" x2="650" y2="140" stroke="#10b981" strokeWidth="2.5" />
+            <text x="660" y="135" fill="#f87171" fontSize="8" fontWeight="700">Jumper Bodi</text>
+          </>
+        ) : isTNCS ? (
+          <>
+            {/* Split PEN into N and PE at Main Panel */}
+            <line x1="520" y1="115" x2="545" y2="115" stroke="#059669" strokeWidth="3" />
+            <circle cx="545" cy="115" r="4" fill="#f59e0b" />
+            <text x="545" y="106" textAnchor="middle" fill="#fbbf24" fontSize="8" fontWeight="800">SPLIT</text>
+            {/* Neutral to load */}
+            <line x1="545" y1="115" x2="610" y2="115" stroke="#0284c7" strokeWidth="2.5" />
+            {/* PE bus to chassis */}
+            <line x1="545" y1="115" x2="545" y2="155" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="545" y1="155" x2="650" y2="155" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="650" y1="155" x2="650" y2="150" stroke="#10b981" strokeWidth="2.5" />
+            {/* Auxiliary Earth Rod for TN-C-S */}
+            <line x1="545" y1="155" x2="545" y2="210" stroke="#10b981" strokeWidth="2" />
+            <line x1="535" y1="210" x2="555" y2="210" stroke="#10b981" strokeWidth="2" />
+            <line x1="538" y1="214" x2="552" y2="214" stroke="#10b981" strokeWidth="1.5" />
+            <text x="545" y="226" textAnchor="middle" fill="#10b981" fontSize="8">Ra Bantu</text>
+          </>
+        ) : (
+          <>
+            <line x1="520" y1="115" x2="610" y2="115" stroke="#0284c7" strokeWidth="2.5" />
+            <circle cx="610" cy="115" r="3" fill="#0284c7" />
+          </>
+        )}
+
+        {/* Chassis Grounding to Ground Rod (TT and IT) */}
+        {(isTT || isIT) && (
+          <>
+            <line x1="650" y1="150" x2="650" y2="210" stroke="#10b981" strokeWidth="3" />
+            <circle cx="650" cy="150" r="3.5" fill="#10b981" />
+            {/* Earth Rod Symbol */}
+            <line x1="638" y1="210" x2="662" y2="210" stroke="#10b981" strokeWidth="3" />
+            <line x1="642" y1="214" x2="658" y2="214" stroke="#10b981" strokeWidth="2" />
+            <line x1="646" y1="218" x2="654" y2="218" stroke="#10b981" strokeWidth="1.5" />
+            <text x="650" y="235" textAnchor="middle" fill="#34d399" fontSize="9" fontWeight="700">
+              {isTT ? 'Ra ≤ 5 Ω (Pasak Lokal)' : 'Ra Mandiri (Lokal)'}
+            </text>
+          </>
+        )}
+
+        {/* TN-S chassis connection to PE wire */}
+        {isTNS && (
+          <>
+            <line x1="520" y1="155" x2="650" y2="155" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="650" y1="155" x2="650" y2="150" stroke="#10b981" strokeWidth="2.5" />
+            <circle cx="650" cy="150" r="3.5" fill="#10b981" />
+            <text x="650" y="170" textAnchor="middle" fill="#34d399" fontSize="8" fontWeight="600">
+              Kembali ke N via PE
+            </text>
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
+
 export default function VisualGuides() {
-  const [subTab, setSubTab] = useState('ip'); // default to 'ip' to show the improved IP index
+  const [subTab, setSubTab] = useState('earthing'); // default to earthing to showcase the new feature
   const [standardView, setStandardView] = useState('current');
   const [selectedZoneIndex, setSelectedZoneIndex] = useState(0);
+  const [selectedEarthingId, setSelectedEarthingId] = useState('TT');
 
   // Interactive IP Decoder states
   const [decodeSolid, setDecodeSolid] = useState('5');
@@ -136,6 +358,7 @@ export default function VisualGuides() {
 
   const activeSolidInfo = IP_FIRST_DIGIT[decodeSolid] || IP_FIRST_DIGIT[0];
   const activeLiquidInfo = IP_SECOND_DIGIT[decodeLiquid] || IP_SECOND_DIGIT[0];
+  const activeEarthingSystem = EARTHING_SYSTEMS.find(s => s.id === selectedEarthingId) || EARTHING_SYSTEMS[0];
 
   return (
     <div className="space-y-4">
@@ -149,17 +372,23 @@ export default function VisualGuides() {
               <h2 className="text-base font-bold text-white">Panduan Visual & Referensi Praktis PUIL</h2>
             </div>
             <p className="text-xs text-slate-400">
-              Standar kode warna penghantar SNI, zonasi keamanan area basah (kamar mandi), dan kode proteksi IP.
+              Sistem pembumian distribusi (TT, TN, IT), standar warna kabel SNI, zonasi kamar mandi, dan proteksi IP.
             </p>
           </div>
 
           {/* Sub Navigation Buttons */}
           <div className="flex flex-wrap gap-1.5">
             <button
+              onClick={() => setSubTab('earthing')}
+              className={`win10-btn ${subTab === 'earthing' ? 'win10-btn-primary' : ''}`}
+            >
+              ⚡ Sistem Pembumian (TT, TN, IT)
+            </button>
+            <button
               onClick={() => setSubTab('ip')}
               className={`win10-btn ${subTab === 'ip' ? 'win10-btn-primary' : ''}`}
             >
-              🛡️ Kode Proteksi IP (Lengkap)
+              🛡️ Kode Proteksi IP
             </button>
             <button
               onClick={() => setSubTab('colors')}
@@ -171,11 +400,12 @@ export default function VisualGuides() {
               onClick={() => setSubTab('zones')}
               className={`win10-btn ${subTab === 'zones' ? 'win10-btn-primary' : ''}`}
             >
-              🚿 Zonasi Kamar Mandi
+              🚿 Kamar Mandi
             </button>
           </div>
         </div>
       </div>
+
 
       {/* SUB-TAB: IP CODE INDEX & DECODER WIZARD */}
       {subTab === 'ip' && (
@@ -494,6 +724,267 @@ export default function VisualGuides() {
         </div>
       )}
 
+      {/* SUB-TAB: SISTEM PEMBUMIAN DISTRIBUSI TENAGA LISTRIK (TT, TN-S, TN-C-S, TN-C, IT) */}
+      {subTab === 'earthing' && (
+        <div className="space-y-4">
+
+          {/* 1. Selector Buttons for 5 Earthing Systems */}
+          <div className="win10-card space-y-3">
+            <div className="win10-card-header">
+              <span className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-emerald-400" />
+                Pilih Sistem Pembumian Distribusi (PUIL 2011 Bagian 312.2 / SNI IEC 60364)
+              </span>
+              <span className="text-xs font-mono text-slate-400">
+                5 Klasifikasi Standar Internasional
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+              {EARTHING_SYSTEMS.map((sys) => {
+                const isActive = sys.id === selectedEarthingId;
+                return (
+                  <button
+                    key={sys.id}
+                    onClick={() => setSelectedEarthingId(sys.id)}
+                    className={`win10-btn text-left p-2.5 flex flex-col items-start gap-1 ${
+                      isActive ? 'win10-btn-primary' : ''
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="font-bold text-xs">{sys.name}</span>
+                      {sys.isIndonesiaPlnStandard && (
+                        <span className={`text-[9px] px-1 py-0.5 rounded font-mono font-bold ${
+                          isActive ? 'bg-white text-sky-800' : 'bg-emerald-500/20 text-emerald-300'
+                        }`}>
+                          PLN RI
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[10px] opacity-80 line-clamp-1">
+                      {sys.badgeText}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 2. Active System Interactive Schematic & Detailed Card */}
+          <div className="win10-card space-y-4">
+            
+            {/* Header with Title and Badges */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-700/30">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-black text-sky-400 font-mono">
+                    {activeEarthingSystem.name}
+                  </span>
+                  <span className="win10-badge win10-badge-accent font-bold">
+                    {activeEarthingSystem.badgeText}
+                  </span>
+                  {activeEarthingSystem.isIndonesiaPlnStandard && (
+                    <span className="win10-badge win10-badge-success font-bold">
+                      🇮🇩 Standar Wajib Pelanggan PLN
+                    </span>
+                  )}
+                </div>
+                <h3 className="text-sm font-semibold text-white mt-1">
+                  {activeEarthingSystem.fullName}
+                </h3>
+              </div>
+
+              <div className="text-right">
+                <span className="text-[11px] text-slate-400 font-mono block">Kode Huruf IEC 60364</span>
+                <span className="text-xs font-bold text-amber-400 font-mono">
+                  {activeEarthingSystem.id}
+                </span>
+              </div>
+            </div>
+
+            {/* Code Meaning Breakdown Callout */}
+            <div className="p-3 rounded bg-slate-900/80 border border-slate-800 text-xs space-y-1.5 font-mono">
+              <span className="text-slate-400 font-bold block uppercase text-[10px] tracking-wider mb-1">
+                Makna Akronim Bahasa (Prancis / Latin):
+              </span>
+              <div className="flex items-start gap-2">
+                <span className="text-sky-400 font-bold shrink-0">Huruf ke-1:</span>
+                <span className="text-slate-300">{activeEarthingSystem.codeMeaning.first}</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-emerald-400 font-bold shrink-0">Huruf ke-2:</span>
+                <span className="text-slate-300">{activeEarthingSystem.codeMeaning.second}</span>
+              </div>
+              {activeEarthingSystem.codeMeaning.third && (
+                <div className="flex items-start gap-2">
+                  <span className="text-amber-400 font-bold shrink-0">Huruf ke-3/4:</span>
+                  <span className="text-slate-300">{activeEarthingSystem.codeMeaning.third}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Circuit Schematic Diagram SVG */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5 uppercase tracking-wide">
+                  <Activity className="w-3.5 h-3.5 text-sky-400" />
+                  Diagram Rangkaian Sirkit Pembumian ({activeEarthingSystem.id})
+                </span>
+                <span className="text-[11px] text-slate-500 font-mono">
+                  Skematik Jalur Fasa (L), Netral (N), Proteksi (PE), & Tanah
+                </span>
+              </div>
+
+              <EarthingDiagram systemId={activeEarthingSystem.id} />
+            </div>
+
+            {/* Summary text */}
+            <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/50 p-3 rounded border border-slate-800">
+              {activeEarthingSystem.summary}
+            </p>
+
+            {/* 2-Column Technical Parameters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              {/* Left Column: Conductors & Protection Rules */}
+              <div className="space-y-3">
+                <div className="p-3.5 rounded bg-slate-900/70 border border-slate-800 space-y-2">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5 pb-1 border-b border-slate-800">
+                    <Layers className="w-3.5 h-3.5 text-sky-400" />
+                    Penghantar & Kabel Jalur Distribusi:
+                  </span>
+                  <p className="text-xs text-slate-300 font-mono">
+                    {activeEarthingSystem.conductors}
+                  </p>
+                </div>
+
+                <div className="p-3.5 rounded bg-slate-900/70 border border-amber-500/30 space-y-2">
+                  <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5 pb-1 border-b border-slate-800">
+                    <Shield className="w-3.5 h-3.5 text-amber-400" />
+                    Persyaratan Proteksi Wajib PUIL:
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {activeEarthingSystem.protectionRequired}
+                  </p>
+                </div>
+              </div>
+
+              {/* Right Column: Pros, Cons & Applications */}
+              <div className="space-y-3">
+                <div className="p-3.5 rounded bg-slate-900/70 border border-slate-800 space-y-2">
+                  <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 pb-1 border-b border-slate-800">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                    Keunggulan Sistem:
+                  </span>
+                  <ul className="space-y-1 text-xs text-slate-300">
+                    {activeEarthingSystem.advantages.map((adv, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="text-emerald-400 font-bold">•</span>
+                        <span>{adv}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <span className="text-xs font-bold text-red-400 flex items-center gap-1.5 pt-2 pb-1 border-b border-slate-800">
+                    <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
+                    Kekurangan / Batasan Kritis:
+                  </span>
+                  <ul className="space-y-1 text-xs text-slate-300">
+                    {activeEarthingSystem.disadvantages.map((dis, idx) => (
+                      <li key={idx} className="flex items-start gap-1.5">
+                        <span className="text-red-400 font-bold">•</span>
+                        <span>{dis}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="p-3.5 rounded bg-slate-900/70 border border-sky-500/30">
+                  <span className="text-xs font-bold text-sky-400 block mb-1">
+                    📌 Penerapan Lazim di Lapangan:
+                  </span>
+                  <p className="text-xs text-slate-300 leading-relaxed">
+                    {activeEarthingSystem.applications}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* 3. Comprehensive Comparison Table (PUIL & IEC 60364) */}
+          <div className="win10-card space-y-3">
+            <div className="win10-card-header">
+              <span className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4 text-amber-400" />
+                Tabel Perbandingan 5 Sistem Pembumian PUIL 2011 / 2020
+              </span>
+              <span className="text-xs font-mono text-slate-400">Ringkasan Referensi Cepat</span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="win10-table w-full text-xs">
+                <thead>
+                  <tr>
+                    <th>Sistem</th>
+                    <th>Titik Netral Trafo (Sumber)</th>
+                    <th>Bodi Beban Konsumen (BKT)</th>
+                    <th>Jumlah Kawat (3-Fasa)</th>
+                    <th>Proteksi Wajib</th>
+                    <th>Standar Indonesia</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className={selectedEarthingId === 'TT' ? 'bg-sky-500/10' : ''}>
+                    <td className="font-bold font-mono text-sky-400">TT</td>
+                    <td>Ditanahkan langsung (Rb)</td>
+                    <td>Ditanahkan mandiri (Ra ≤ 5 Ω)</td>
+                    <td className="font-mono">4 kawat (L1, L2, L3, N)</td>
+                    <td><strong>RCD / GPAS 30mA (Wajib)</strong></td>
+                    <td><span className="win10-badge win10-badge-success">Standar Resmi PLN Rumah</span></td>
+                  </tr>
+                  <tr className={selectedEarthingId === 'TN-S' ? 'bg-sky-500/10' : ''}>
+                    <td className="font-bold font-mono text-emerald-400">TN-S</td>
+                    <td>Ditanahkan langsung (Rb)</td>
+                    <td>Terhubung ke kabel PE sumber</td>
+                    <td className="font-mono">5 kawat (L1, L2, L3, N, PE)</td>
+                    <td>MCB / Sekring & RCD</td>
+                    <td>Data Center & Rumah Sakit</td>
+                  </tr>
+                  <tr className={selectedEarthingId === 'TN-C-S' ? 'bg-sky-500/10' : ''}>
+                    <td className="font-bold font-mono text-amber-400">TN-C-S</td>
+                    <td>Ditanahkan langsung (Rb)</td>
+                    <td>Terhubung ke PE dipecah di PDB</td>
+                    <td className="font-mono">4 kawat (PEN) lalu 5 kawat</td>
+                    <td>MCB & RCD (setelah split)</td>
+                    <td>Gedung Komersial & Industri</td>
+                  </tr>
+                  <tr className={selectedEarthingId === 'TN-C' ? 'bg-sky-500/10' : ''}>
+                    <td className="font-bold font-mono text-slate-300">TN-C</td>
+                    <td>Ditanahkan langsung (Rb)</td>
+                    <td>Terhubung ke kawat PEN</td>
+                    <td className="font-mono">4 kawat (L1, L2, L3, PEN)</td>
+                    <td>MCB (<strong>Dilarang RCD</strong>)</td>
+                    <td>Khusus Feeder Utama Hulu</td>
+                  </tr>
+                  <tr className={selectedEarthingId === 'IT' ? 'bg-sky-500/10' : ''}>
+                    <td className="font-bold font-mono text-purple-400">IT</td>
+                    <td>Diisolasi / Impedansi Z tinggi</td>
+                    <td>Ditanahkan mandiri (Ra)</td>
+                    <td className="font-mono">3 / 4 kawat termonitor</td>
+                    <td><strong>IMD (Insulation Monitor)</strong></td>
+                    <td>Ruang Operasi RS (Kamar Bedah)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 }
+
