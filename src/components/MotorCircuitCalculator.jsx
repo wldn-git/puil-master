@@ -413,82 +413,323 @@ export default function MotorCircuitCalculator() {
         </div>
       </div>
 
-      {/* Visual Single Line Diagram (SLD) - Inspired directly by Gambar 510.5-2 */}
-      <div className="win10-card space-y-3">
+      {/* Visual Single Line Diagram (SLD) - Standar Gambar 510.5-2 PUIL 2011 / 5100.5-2 PUIL 2020 */}
+      <div className="win10-card space-y-4">
         <div className="win10-card-header">
-          <span className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-400" />
-            Diagram Skematik Garis Tunggal Kelompok Motor (Representasi Gambar 510.5-2)
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-amber-500" />
+            <span className="font-bold">
+              Diagram Skematik Garis Tunggal (SLD) Sirkit Kelompok Motor
+            </span>
+          </div>
+          <span className="text-xs font-mono text-slate-400">
+            Representasi Resmi Gambar 510.5-2 PUIL
           </span>
-          <span className="text-xs font-mono text-slate-400">Feeder & Rangkaian Sirkit Akhir</span>
         </div>
 
-        <div className="overflow-x-auto p-4 bg-slate-950/70 rounded border border-slate-800">
-          <div className="min-w-[680px] space-y-4">
-            
-            {/* Feeder Incoming Section */}
-            <div className="flex items-center gap-3 bg-slate-900/90 p-3 rounded border border-slate-800">
-              <div className="p-2 rounded bg-amber-500/10 text-amber-400 font-bold font-mono text-xs">
-                SUMBER 3-FASA
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-500 shrink-0" />
-              <div className="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs font-mono text-amber-300">
-                GPHP Feeder: <strong>MCCB {calculation.recommendedFeederBreaker}A</strong>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-500 shrink-0" />
-              <div className="px-3 py-1.5 rounded bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-400">
-                Kabel Feeder: <strong>KHA ≥ {calculation.khaFeeder}A</strong> ({calculation.feederCableRecommendation})
-              </div>
-            </div>
-
-            {/* Horizontal Busbar */}
-            <div className="relative py-2">
-              <div className="h-2 bg-amber-500/80 rounded w-full"></div>
-              <span className="absolute top-0 right-2 text-[10px] font-mono text-amber-300 bg-slate-900 px-1.5 rounded border border-amber-500/30">
-                BUSBAR DISTRIBUSI PHB MOTOR
-              </span>
-            </div>
-
-            {/* 3 Motor Branches */}
-            <div className="grid grid-cols-3 gap-3">
-              {calculation.motorResults.map((motor, idx) => (
-                <div key={motor.id} className="p-3 rounded bg-slate-900/90 border border-slate-800 text-center space-y-2 text-xs">
-                  <div className="text-[10px] font-mono text-slate-400 font-bold uppercase">
-                    Cabang {idx + 1}
-                  </div>
-                  
-                  {/* Branch Breaker */}
-                  <div className="p-1.5 rounded bg-slate-800 border border-slate-700 text-[11px] font-mono text-white">
-                    GPHP: <strong>MCB {motor.recommendedGphpBreaker}A</strong>
-                  </div>
-
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 mx-auto rotate-90" />
-
-                  {/* Overload TOR */}
-                  <div className="p-1.5 rounded bg-amber-950/40 border border-amber-500/30 text-[11px] font-mono text-amber-300">
-                    TOR: <strong>{motor.torSetting} A</strong>
-                  </div>
-
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 mx-auto rotate-90" />
-
-                  {/* Cable */}
-                  <div className="p-1.5 rounded bg-slate-800/80 text-[10px] font-mono text-emerald-400">
-                    KHA ≥ {motor.khaBranch}A
-                  </div>
-
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-500 mx-auto rotate-90" />
-
-                  {/* Motor Unit */}
-                  <div className="p-2.5 rounded bg-sky-950/30 border border-sky-500/40 text-center">
-                    <span className="font-bold text-sky-400 block text-xs">{motor.name}</span>
-                    <span className="text-[11px] font-mono text-white block mt-0.5">In = {motor.In} A</span>
-                    <span className="text-[10px] text-slate-400 block mt-0.5 truncate">{motor.startMethod.name}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
+        {/* Petunjuk Cepat */}
+        <div className="p-3 rounded bg-sky-500/10 border border-sky-500/30 text-xs text-slate-300 flex items-start gap-2.5">
+          <Info className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
+          <div className="leading-relaxed">
+            <strong>Cara Membaca Skematik:</strong> Arus mengalir dari <strong>Sumber Listrik 3-Fasa</strong> di atas melalui <strong>Kabel & GPHP Feeder</strong> menuju <strong>Rel Busbar PHB (Tembaga)</strong>. Dari busbar, arus didistribusikan ke masing-masing <strong>Sirkit Cabang Motor</strong> secara paralel yang masing-masing dilindungi oleh <strong>MCB (Hubung Pendek)</strong>, <strong>Kabel KHA 125%</strong>, dan <strong>TOR (Beban Lebih)</strong> sebelum masuk ke motor listrik.
           </div>
+        </div>
+
+        {/* SVG Interactive Single Line Diagram */}
+        {(() => {
+          const branchCount = calculation.motorResults.length;
+          const colWidth = 240;
+          const marginX = 50;
+          const svgWidth = Math.max(760, marginX * 2 + branchCount * colWidth);
+          const svgHeight = 490;
+          const feederX = svgWidth / 2;
+          const busbarX1 = marginX + 20;
+          const busbarX2 = svgWidth - marginX - 20;
+
+          return (
+            <div 
+              className="w-full overflow-x-auto p-4 rounded"
+              style={{ backgroundColor: 'var(--win-surface-alt)', border: '1px solid var(--win-border)' }}
+            >
+              <svg 
+                viewBox={`0 0 ${svgWidth} ${svgHeight}`} 
+                className="w-full min-w-[720px] h-auto font-sans select-none"
+              >
+                {/* ================= 1. SALURAN MASUK (FEEDER) ================= */}
+                {/* Sumber 3-Fasa Tag */}
+                <rect x={feederX - 110} y="15" width="220" height="28" rx="4" fill="#0284c7" />
+                <text x={feederX} y="33" textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="800">
+                  SUMBER DAYA 3-FASA (400V)
+                </text>
+
+                {/* Wire from source to Feeder Breaker */}
+                <line x1={feederX} y1="43" x2={feederX} y2="58" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                {/* GPHP Feeder Breaker (MCCB) */}
+                <rect x={feederX - 125} y="58" width="250" height="34" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="2" />
+                <rect x={feederX - 125} y="58" width="250" height="15" fill="#b45309" />
+                <text x={feederX} y="69" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                  GPHP FEEDER (PENGAMAN HUBUNG PENDEK)
+                </text>
+                <text x={feederX} y="85" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                  MCCB {calculation.recommendedFeederBreaker} Ampere
+                </text>
+
+                {/* Wire from Breaker to Feeder Cable */}
+                <line x1={feederX} y1="92" x2={feederX} y2="105" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                {/* Kabel Feeder Pill */}
+                <rect x={feederX - 145} y="105" width="290" height="22" rx="3" fill="#059669" stroke="#047857" strokeWidth="1" />
+                <text x={feederX} y="120" textAnchor="middle" fill="#ffffff" fontSize="10" fontWeight="700">
+                  Kabel Feeder: KHA ≥ {calculation.khaFeeder}A ({calculation.feederCableRecommendation})
+                </text>
+
+                {/* Wire into Busbar */}
+                <line x1={feederX} y1="127" x2={feederX} y2="140" stroke="var(--win-text)" strokeWidth="3" />
+
+                {/* ================= 2. REL PEMBAGI / BUSBAR (TEMBAGA) ================= */}
+                {/* Thick Copper Busbar */}
+                <rect x={busbarX1} y="137" width={busbarX2 - busbarX1} height="8" rx="2" fill="#d97706" stroke="#92400e" strokeWidth="1.5" />
+                <text x={busbarX1 + 10} y="132" fill="var(--win-text)" fontSize="10" fontWeight="800">
+                  REL PEMBAGI / BUSBAR PHB MOTOR (R - S - T)
+                </text>
+                {/* Node for Feeder entry */}
+                <circle cx={feederX} cy="141" r="5" fill="#78350f" />
+
+                {/* ================= 3. SIRKIT CABANG TIAP MOTOR ================= */}
+                {calculation.motorResults.map((motor, i) => {
+                  const colCenter = marginX + i * colWidth + colWidth / 2;
+                  const isHighest = calculation.maxMotor && calculation.maxMotor.id === motor.id;
+
+                  return (
+                    <g key={motor.id}>
+                      {/* Junction Node on Busbar */}
+                      <circle cx={colCenter} cy="141" r="4.5" fill="#78350f" />
+
+                      {/* Drop line from busbar to Cabang Header */}
+                      <line x1={colCenter} y1="145" x2={colCenter} y2="162" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                      {/* Cabang Header Tag */}
+                      <rect 
+                        x={colCenter - 65} 
+                        y="162" 
+                        width="130" 
+                        height="22" 
+                        rx="3" 
+                        fill={isHighest ? '#d97706' : 'var(--win-surface)'} 
+                        stroke={isHighest ? '#92400e' : 'var(--win-border)'} 
+                        strokeWidth="1.5" 
+                      />
+                      <text 
+                        x={colCenter} 
+                        y="177" 
+                        textAnchor="middle" 
+                        fill={isHighest ? '#ffffff' : 'var(--win-text)'} 
+                        fontSize="10" 
+                        fontWeight="800"
+                      >
+                        CABANG {i + 1} {isHighest ? '★ TERBESAR' : ''}
+                      </text>
+
+                      {/* Wire to GPHP Breaker */}
+                      <line x1={colCenter} y1="184" x2={colCenter} y2="200" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                      {/* Level 1: GPHP Sirkit Akhir (MCB) */}
+                      <rect x={colCenter - 85} y="200" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#0284c7" strokeWidth="1.8" />
+                      <rect x={colCenter - 85} y="200" width="170" height="14" fill="#0284c7" />
+                      <text x={colCenter} y="210" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                        1. GPHP SIRKIT AKHIR
+                      </text>
+                      <text x={colCenter} y="226" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                        MCB {motor.recommendedGphpBreaker} A
+                      </text>
+                      <text x={colCenter} y="240" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                        Faktor {motor.startMethod.factor * 100}% × In ({motor.maxGphp}A)
+                      </text>
+
+                      {/* Wire to Cable */}
+                      <line x1={colCenter} y1="234" x2={colCenter} y2="252" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                      {/* Level 2: Penghantar Kabel Sirkit Akhir (125% In) */}
+                      <rect x={colCenter - 85} y="252" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#059669" strokeWidth="1.8" />
+                      <rect x={colCenter - 85} y="252" width="170" height="14" fill="#059669" />
+                      <text x={colCenter} y="262" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                        2. KABEL PENGHANTAR (KHA)
+                      </text>
+                      <text x={colCenter} y="278" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                        KHA ≥ {motor.khaBranch} A
+                      </text>
+                      <text x={colCenter} y="292" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                        Kabel: {motor.cableRecommendation}
+                      </text>
+
+                      {/* Wire to Overload TOR */}
+                      <line x1={colCenter} y1="286" x2={colCenter} y2="306" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                      {/* Level 3: Proteksi Beban Lebih (TOR) */}
+                      <rect x={colCenter - 85} y="306" width="170" height="34" rx="4" fill="var(--win-surface)" stroke="#b45309" strokeWidth="1.8" />
+                      <rect x={colCenter - 85} y="306" width="170" height="14" fill="#b45309" />
+                      <text x={colCenter} y="316" textAnchor="middle" fill="#ffffff" fontSize="8.5" fontWeight="800">
+                        3. BEBAN LEBIH (TOR)
+                      </text>
+                      <text x={colCenter} y="332" textAnchor="middle" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                        Setelan: {motor.torSetting} A
+                      </text>
+                      <text x={colCenter} y="346" textAnchor="middle" fill="var(--win-text-secondary)" fontSize="8">
+                        {Math.round(torFactor * 100)}% × In (Proteksi Termal)
+                      </text>
+
+                      {/* Wire to Motor Unit */}
+                      <line x1={colCenter} y1="340" x2={colCenter} y2="362" stroke="var(--win-text)" strokeWidth="2.5" />
+
+                      {/* Level 4: Motor Listrik & Grounding */}
+                      <rect 
+                        x={colCenter - 95} 
+                        y="362" 
+                        width="190" 
+                        height="98" 
+                        rx="6" 
+                        fill="var(--win-surface)" 
+                        stroke={isHighest ? '#d97706' : 'var(--win-border)'} 
+                        strokeWidth={isHighest ? 2 : 1.5} 
+                      />
+
+                      {/* Motor Circle Symbol */}
+                      <circle cx={colCenter - 52} cy="411" r="26" fill="var(--win-surface-alt)" stroke="#0284c7" strokeWidth="2.5" />
+                      <text x={colCenter - 52} y="407" textAnchor="middle" fill="var(--win-text)" fontSize="14" fontWeight="900">
+                        M
+                      </text>
+                      <text x={colCenter - 52} y="423" textAnchor="middle" fill="var(--win-text)" fontSize="9" fontWeight="800">
+                        3 ~
+                      </text>
+
+                      {/* Motor Details */}
+                      <text x={colCenter - 14} y="384" fill="var(--win-text)" fontSize="11" fontWeight="800">
+                        {motor.name}
+                      </text>
+                      <text x={colCenter - 14} y="402" fill="var(--win-accent)" fontSize="11" fontWeight="800">
+                        In = {motor.In} A
+                      </text>
+                      <text x={colCenter - 14} y="418" fill="var(--win-text-secondary)" fontSize="9" fontWeight="600">
+                        {motor.typeDesc}
+                      </text>
+                      <text x={colCenter - 14} y="432" fill="var(--win-text-muted)" fontSize="8" fontWeight="500">
+                        {motor.startMethod.name.split('-')[1] || motor.startMethod.name}
+                      </text>
+
+                      {/* Chassis Grounding Terminal (PE) */}
+                      <line x1={colCenter + 75} y1="411" x2={colCenter + 75} y2="437" stroke="#107c10" strokeWidth="2" />
+                      <line x1={colCenter + 68} y1="437" x2={colCenter + 82} y2="437" stroke="#107c10" strokeWidth="2" />
+                      <line x1={colCenter + 71} y1="441" x2={colCenter + 79} y2="441" stroke="#107c10" strokeWidth="1.5" />
+                      <text x={colCenter + 75} y="451" textAnchor="middle" fill="var(--win-success-text)" fontSize="7" fontWeight="800">
+                        PE
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+          );
+        })()}
+
+        {/* Penjelasan 4 Tahap Urutan Proteksi Sesuai PUIL Gambar 510.5-2 */}
+        <div className="space-y-2 pt-2">
+          <div className="text-xs font-bold text-white flex items-center gap-1.5">
+            <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+            Penjelasan Struktur & Cara Menghitung Tiap Elemen (Gambar 510.5-2):
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            {/* Feeder */}
+            <div className="p-3 rounded win10-card space-y-1">
+              <span className="font-bold text-sky-500 block">⚡ Saluran Pengisi (Feeder)</span>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Menghantarkan total arus seluruh motor. Rumus KHA:
+                <br />
+                <code className="text-[10px] text-sky-400 font-mono font-bold">
+                  KHA = (125% × In_maks) + Σ In_lain
+                </code>
+                <br />
+                Hanya motor terbesar yang dikalikan 125%, motor lainnya dijumlahkan biasa.
+              </p>
+            </div>
+
+            {/* GPHP Cabang */}
+            <div className="p-3 rounded win10-card space-y-1">
+              <span className="font-bold text-blue-500 block">🛡️ 1. GPHP Sirkit Akhir</span>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Pengaman hubung pendek (MCB/Sekring). Nilai pengenal disetel tinggi (150% - 250% In) agar tidak langsung *trip* saat motor mengalami lonjakan arus start yang besar.
+              </p>
+            </div>
+
+            {/* Kabel KHA */}
+            <div className="p-3 rounded win10-card space-y-1">
+              <span className="font-bold text-emerald-500 block">🔌 2. Kabel Sirkit Akhir</span>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Wajib memiliki KHA minimal <strong>125% dari In motor</strong> (PUIL 510.5.2) agar penghantar tidak leleh atau panas saat motor bekerja terus-menerus pada beban penuh.
+              </p>
+            </div>
+
+            {/* TOR */}
+            <div className="p-3 rounded win10-card space-y-1">
+              <span className="font-bold text-amber-500 block">🔥 3. Proteksi Beban Lebih (TOR)</span>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                Thermal Overload Relay melindungi motor dari panas berlebih jika terjadi macet mekanik. Disetel pada <strong>115% - 125% In</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabel Ringkasan Komparasi Perhitungan Angka Nyata */}
+        <div className="overflow-x-auto pt-2">
+          <table className="win10-table w-full text-xs">
+            <thead>
+              <tr>
+                <th>Titik Sirkit</th>
+                <th>Komponen</th>
+                <th>Rumus Perhitungan PUIL</th>
+                <th>Hasil Hitung</th>
+                <th>Alat / Kabel Terpilih</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Feeder Row */}
+              <tr style={{ backgroundColor: 'var(--win-accent-bg)' }}>
+                <td className="font-bold text-sky-500 font-mono">SALURAN UTAMA (FEEDER)</td>
+                <td>Kabel & GPHP Pengisi</td>
+                <td className="font-mono text-[11px]">
+                  KHA = (1.25 × {calculation.maxMotor?.In || 0}) + {calculation.sumOtherIn || 0} A
+                </td>
+                <td className="font-mono font-bold">{calculation.khaFeeder} A</td>
+                <td className="font-bold">
+                  MCCB {calculation.recommendedFeederBreaker}A & Kabel {calculation.feederCableRecommendation}
+                </td>
+              </tr>
+              {/* Each Branch Row */}
+              {calculation.motorResults.map((motor, idx) => (
+                <tr key={motor.id}>
+                  <td className="font-mono font-bold">
+                    CABANG {idx + 1} ({motor.name})
+                    {calculation.maxMotor && calculation.maxMotor.id === motor.id && (
+                      <span className="ml-1 text-[9px] px-1 py-0.5 rounded bg-amber-500/20 text-amber-500 font-bold">
+                        Beban Terbesar
+                      </span>
+                    )}
+                  </td>
+                  <td>Sirkit Akhir Motor</td>
+                  <td className="font-mono text-[11px]">
+                    KHA: 125% × {motor.In}A | GPHP: {motor.startMethod.factor * 100}% × {motor.In}A
+                  </td>
+                  <td className="font-mono">
+                    KHA: {motor.khaBranch}A | TOR: {motor.torSetting}A
+                  </td>
+                  <td className="font-semibold">
+                    MCB {motor.recommendedGphpBreaker}A • {motor.cableRecommendation}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
 
