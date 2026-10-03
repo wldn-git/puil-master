@@ -3,13 +3,14 @@ import Sidebar from './components/Sidebar';
 import TopHeader from './components/TopHeader';
 import CableCalculator from './components/CableCalculator';
 import ProtectionCalculator from './components/ProtectionCalculator';
+import MotorCircuitCalculator from './components/MotorCircuitCalculator';
 import GroundingCalculator from './components/GroundingCalculator';
 import VisualGuides from './components/VisualGuides';
 import PuilKnowledgeBase from './components/PuilKnowledgeBase';
 import InstallationChecklist from './components/InstallationChecklist';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('cable');
+  const [activeTab, setActiveTab] = useState('motor'); // Default to motor tab to immediately showcase the new calculator!
   const [theme, setTheme] = useState('dark');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -46,12 +47,14 @@ export default function App() {
           <div className="transition-opacity duration-150">
             {activeTab === 'cable' && <CableCalculator />}
             {activeTab === 'protection' && <ProtectionCalculator />}
+            {activeTab === 'motor' && <MotorCircuitCalculator />}
             {activeTab === 'grounding' && <GroundingCalculator />}
             {activeTab === 'guides' && <VisualGuides />}
             {activeTab === 'knowledge' && <PuilKnowledgeBase />}
             {activeTab === 'checklist' && <InstallationChecklist />}
           </div>
         </main>
+
 
         {/* Windows 10 Status Bar */}
         <footer className="win10-statusbar no-print">

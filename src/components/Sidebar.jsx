@@ -2,6 +2,7 @@ import React from 'react';
 import { 
   Zap, 
   ShieldCheck, 
+  RotateCw,
   Globe, 
   Palette, 
   BookOpen, 
@@ -16,11 +17,13 @@ export default function Sidebar({ activeTab, setActiveTab, theme, setTheme, isMo
   const navTabs = [
     { id: 'cable', label: 'Kabel & KHA', icon: Zap },
     { id: 'protection', label: 'Proteksi MCB / RCD', icon: ShieldCheck },
+    { id: 'motor', label: 'Sirkit Motor (510.5)', icon: RotateCw },
     { id: 'grounding', label: 'Pembumian (Grounding)', icon: Globe },
     { id: 'guides', label: 'Panduan Visual SNI', icon: Palette },
     { id: 'knowledge', label: 'Kamus Pasal PUIL', icon: BookOpen },
     { id: 'checklist', label: 'Checklist Audit', icon: ClipboardCheck },
   ];
+
 
   const handlePrint = () => {
     window.print();

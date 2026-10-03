@@ -14,7 +14,13 @@ export default function TopHeader({ activeTab, theme, setTheme, onToggleMobileMe
           title: 'Proteksi Pemutus Sirkit (MCB & GPAS/RCD)',
           subtitle: 'Karakteristik Kurva B, C, D & Proteksi Manusia 30mA (PUIL 411.3.3)'
         };
+      case 'motor':
+        return {
+          title: 'Kalkulator Sirkit Motor Listrik 3-Fasa',
+          subtitle: 'KHA Feeder, Sirkit Akhir, dan Proteksi Arus Lebih (PUIL Gambar 510.5-2 / 5100.5-2)'
+        };
       case 'grounding':
+
         return {
           title: 'Kalkulator Tahanan Pembumian (Grounding)',
           subtitle: 'Perhitungan Elektroda Batang Pasak Tunggal & Paralel (Target ≤ 5 Ω)'
