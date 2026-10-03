@@ -197,10 +197,10 @@ export default function CableCalculator() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="calc-container">
 
         {/* Input Parameters Column */}
-        <div className="lg:col-span-7 space-y-5">
+        <div className="space-y-5">
           <div className="glass-panel p-6 border-slate-800 space-y-5">
             <h3 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2 pb-3 border-b border-slate-800">
               <Cpu className="w-4 h-4 text-sky-400" />
@@ -211,26 +211,18 @@ export default function CableCalculator() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="input-label">Sistem Fasa</label>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => handlePhaseChange('1')}
-                    className={`py-2 px-3 rounded-lg text-sm font-semibold border transition ${
-                      phase === '1'
-                        ? 'bg-sky-500/20 border-sky-500 text-sky-300 shadow-sm'
-                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-                    }`}
+                    className={`phase-btn ${phase === '1' ? 'active' : ''}`}
                   >
                     1-Fasa (220V)
                   </button>
                   <button
                     type="button"
                     onClick={() => handlePhaseChange('3')}
-                    className={`py-2 px-3 rounded-lg text-sm font-semibold border transition ${
-                      phase === '3'
-                        ? 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm'
-                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
-                    }`}
+                    className={`phase-btn ${phase === '3' ? 'active-amber' : ''}`}
                   >
                     3-Fasa (380V)
                   </button>
@@ -379,7 +371,7 @@ export default function CableCalculator() {
         </div>
 
         {/* Output Results Card */}
-        <div className="lg:col-span-5 space-y-5">
+        <div className="space-y-5">
           <div className="glass-panel p-6 border-amber-500/30 shadow-lg shadow-amber-500/5 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
 

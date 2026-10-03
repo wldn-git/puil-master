@@ -48,13 +48,9 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                    isActive
-                      ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
-                  }`}
+                  className={`tab-btn ${isActive ? 'active' : ''}`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-slate-950' : 'text-slate-400'}`} />
+                  <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                 </button>
               );
