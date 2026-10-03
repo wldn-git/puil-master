@@ -496,54 +496,54 @@ export default function CableCalculator() {
           Diagram Garis Tunggal (SLD) Sirkit Ini
         </h3>
 
-        <div className="bg-slate-950 p-6 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6 overflow-x-auto">
+        <div className="sld-flow-container">
           
           {/* Source PLN */}
-          <div className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-900 border border-slate-800 min-w-[130px]">
-            <div className="w-10 h-10 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-2">
-              <Zap className="w-5 h-5" />
+          <div className="sld-flow-item">
+            <div className="w-8 h-8 rounded bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-1.5">
+              <Zap className="w-4 h-4" />
             </div>
             <span className="text-xs font-bold text-white">Sumber PLN</span>
             <span className="text-[11px] font-mono text-slate-400">{phase}-Fasa {voltage}V</span>
           </div>
 
-          <div className="hidden md:flex flex-col items-center text-slate-600">
+          <div className="sld-arrow-item">
             <span className="text-[10px] text-slate-400 font-mono mb-1">APP / Meter</span>
-            <ArrowRight className="w-6 h-6 text-slate-600" />
+            <ArrowRight className="w-5 h-5 text-slate-500" />
           </div>
 
           {/* Protection MCB */}
-          <div className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-900 border border-amber-500/30 min-w-[140px] shadow-sm shadow-amber-500/5">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold font-mono mb-2">
+          <div className="sld-flow-item" style={{ borderColor: 'rgba(245, 158, 11, 0.4)' }}>
+            <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold font-mono mb-1.5">
               {calculation.recommendedMcb}A
             </div>
             <span className="text-xs font-bold text-amber-300">MCB Kurva C</span>
             <span className="text-[11px] font-mono text-slate-400">In = {calculation.recommendedMcb} A</span>
           </div>
 
-          <div className="hidden md:flex flex-col items-center text-slate-600">
+          <div className="sld-arrow-item">
             <span className="text-[10px] text-amber-400 font-mono mb-1">{cableLength} m</span>
-            <ArrowRight className="w-6 h-6 text-slate-600" />
+            <ArrowRight className="w-5 h-5 text-slate-500" />
           </div>
 
           {/* Cable Section */}
-          <div className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-900 border border-sky-500/30 min-w-[150px]">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/40 flex items-center justify-center text-sky-400 font-bold font-mono mb-2">
+          <div className="sld-flow-item" style={{ borderColor: 'rgba(14, 165, 233, 0.4)' }}>
+            <div className="w-8 h-8 rounded bg-sky-500/10 border border-sky-500/40 flex items-center justify-center text-sky-400 font-bold font-mono mb-1.5">
               {calculation.selectedSize}
             </div>
-            <span className="text-xs font-bold text-sky-300">NYM {calculation.selectedSize} mm²</span>
+            <span className="text-xs font-bold text-sky-400">NYM {calculation.selectedSize} mm²</span>
             <span className="text-[11px] font-mono text-slate-400">Iz = {calculation.deratedKha} A</span>
           </div>
 
-          <div className="hidden md:flex flex-col items-center text-slate-600">
+          <div className="sld-arrow-item">
             <span className="text-[10px] text-emerald-400 font-mono mb-1">ΔV: {calculation.dropPercent}%</span>
-            <ArrowRight className="w-6 h-6 text-slate-600" />
+            <ArrowRight className="w-5 h-5 text-slate-500" />
           </div>
 
           {/* Load */}
-          <div className="flex flex-col items-center text-center p-3 rounded-xl bg-slate-900 border border-slate-800 min-w-[130px]">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-2">
-              <Cpu className="w-5 h-5" />
+          <div className="sld-flow-item">
+            <div className="w-8 h-8 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-1.5">
+              <Cpu className="w-4 h-4" />
             </div>
             <span className="text-xs font-bold text-white">Beban Konsumen</span>
             <span className="text-[11px] font-mono text-slate-400">{loadValue} {loadType} (Ib={calculation.Ib}A)</span>
