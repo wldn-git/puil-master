@@ -245,18 +245,18 @@ export default function CableCalculator() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="sm:col-span-2">
                 <label className="input-label">Besaran Beban</label>
-                <div className="flex">
+                <div className="win10-input-group">
                   <input
                     type="number"
                     min="1"
                     value={loadValue}
                     onChange={(e) => setLoadValue(e.target.value)}
-                    className="custom-input font-mono rounded-r-none border-r-0 text-lg font-bold"
+                    className="custom-input font-mono font-bold"
                   />
                   <select
                     value={loadType}
                     onChange={(e) => setLoadType(e.target.value)}
-                    className="custom-select rounded-l-none border-l-0 w-28 bg-slate-800 font-semibold text-sky-400 text-sm"
+                    className="win10-input-select-addon"
                   >
                     <option value="WATT">Watt</option>
                     <option value="KVA">kVA</option>
@@ -285,16 +285,16 @@ export default function CableCalculator() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="input-label">Panjang Jalur Kabel (Meter)</label>
-                <div className="relative">
+                <div className="win10-input-group">
                   <input
                     type="number"
                     min="1"
                     max="1000"
                     value={cableLength}
                     onChange={(e) => setCableLength(e.target.value)}
-                    className="custom-input font-mono pr-12"
+                    className="custom-input font-mono"
                   />
-                  <span className="absolute right-3 top-2.5 text-xs text-slate-500 font-mono">meter</span>
+                  <span className="win10-input-addon">meter</span>
                 </div>
               </div>
 
@@ -372,12 +372,11 @@ export default function CableCalculator() {
 
         {/* Output Results Card */}
         <div className="space-y-5">
-          <div className="glass-panel p-6 border-amber-500/30 shadow-lg shadow-amber-500/5 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div className="glass-panel p-6 border-amber-500/30">
 
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-amber-400" />
+            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-700/20">
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-500 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-amber-500" />
                 Hasil Perhitungan PUIL
               </span>
               <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
@@ -386,23 +385,23 @@ export default function CableCalculator() {
             </div>
 
             {/* Recommended Cable Size Hero */}
-            <div className="bg-slate-900/90 rounded-2xl p-5 border border-slate-800 mb-5 text-center relative">
-              <span className="text-xs text-slate-400 font-medium uppercase tracking-wider block mb-1">
+            <div className="win10-hero-tile">
+              <span className="win10-hero-label">
                 Rekomendasi Penampang Kabel
               </span>
-              <div className="flex items-baseline justify-center gap-1.5 my-1">
-                <span className="text-5xl font-black tracking-tight text-white font-mono">
+              <div className="win10-hero-value">
+                <span className="win10-hero-number">
                   {calculation.selectedSize}
                 </span>
-                <span className="text-xl font-bold text-amber-400 font-mono">mm²</span>
+                <span className="win10-hero-unit">mm²</span>
               </div>
-              <span className="inline-block mt-2 text-xs font-medium px-3 py-1 rounded-full bg-slate-800/80 text-sky-300 border border-slate-700">
+              <div className="win10-hero-badge">
                 Jenis Kabel: NYM / NYY (Tembaga Cu)
-              </span>
+              </div>
 
               {calculation.upgradedForDrop && (
-                <div className="mt-3 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-left text-xs text-amber-300 flex items-start gap-2">
-                  <TrendingDown className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="mt-3 p-2 rounded bg-amber-500/10 border border-amber-500/30 text-left text-xs text-amber-400 flex items-start gap-2">
+                  <TrendingDown className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                   <span>
                     <strong>Dinaikkan dari {calculation.initialSizeForKha} mm²:</strong> Penampang diperbesar agar susut tegangan memenuhi syarat PUIL (&le; 4%).
                   </span>
@@ -411,38 +410,38 @@ export default function CableCalculator() {
             </div>
 
             {/* 3 Key Metrics Row: Ib, In, Iz */}
-            <div className="grid grid-cols-3 gap-2.5 mb-5 text-center">
-              <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
-                <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">Arus Beban (Ib)</div>
-                <div className="text-lg font-bold font-mono text-white">{calculation.Ib} <span className="text-xs text-slate-400">A</span></div>
+            <div className="win10-metrics-grid">
+              <div className="win10-metric-box">
+                <span className="win10-metric-label">Arus Beban (Ib)</span>
+                <div className="win10-metric-val">{calculation.Ib} <span className="win10-metric-unit">A</span></div>
               </div>
-              <div className="bg-slate-900/60 p-3 rounded-xl border border-amber-500/30">
-                <div className="text-[10px] uppercase font-bold text-amber-400 mb-1">Rating MCB (In)</div>
-                <div className="text-lg font-bold font-mono text-amber-300">{calculation.recommendedMcb} <span className="text-xs text-slate-400">A</span></div>
+              <div className="win10-metric-box win10-metric-highlight">
+                <span className="win10-metric-label" style={{ color: '#d97706' }}>Rating MCB (In)</span>
+                <div className="win10-metric-val" style={{ color: '#d97706' }}>{calculation.recommendedMcb} <span className="win10-metric-unit">A</span></div>
               </div>
-              <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
-                <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">KHA Izin (Iz)</div>
-                <div className="text-lg font-bold font-mono text-emerald-400">{calculation.deratedKha} <span className="text-xs text-slate-400">A</span></div>
+              <div className="win10-metric-box">
+                <span className="win10-metric-label">KHA Izin (Iz)</span>
+                <div className="win10-metric-val" style={{ color: 'var(--win-success-text)' }}>{calculation.deratedKha} <span className="win10-metric-unit">A</span></div>
               </div>
             </div>
 
             {/* PUIL Golden Safety Condition Check */}
-            <div className="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 text-xs space-y-2 mb-5">
-              <div className="flex items-center justify-between font-semibold">
-                <span className="text-slate-300">Kepatuhan Kondisi PUIL:</span>
-                <span className="font-mono text-emerald-400 flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+            <div className="win10-safety-check">
+              <div className="win10-safety-header">
+                <span>Kepatuhan Kondisi PUIL:</span>
+                <span className="win10-safety-formula">
+                  <CheckCircle2 className="w-3.5 h-3.5 inline" />
                   {calculation.Ib} A ≤ {calculation.recommendedMcb} A ≤ {calculation.deratedKha} A
                 </span>
               </div>
-              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden flex">
+              <div className="win10-progress-track">
                 <div 
-                  className="bg-sky-400 h-full transition-all"
+                  className="win10-progress-bar"
                   style={{ width: `${Math.min(100, (calculation.Ib / calculation.deratedKha) * 100)}%` }}
                   title="Persentase Beban terhadap KHA Kabel"
                 ></div>
               </div>
-              <div className="flex justify-between text-[10px] text-slate-500 font-mono">
+              <div className="win10-safety-sub">
                 <span>0 A</span>
                 <span>Margin Aman: {(calculation.deratedKha - calculation.Ib).toFixed(1)} A</span>
                 <span>KHA: {calculation.deratedKha} A</span>
@@ -450,12 +449,8 @@ export default function CableCalculator() {
             </div>
 
             {/* Voltage Drop Result Card */}
-            <div className={`p-4 rounded-xl border transition ${
-              calculation.isDropSafe 
-                ? 'bg-emerald-950/20 border-emerald-500/30' 
-                : calculation.isDropWarning 
-                ? 'bg-amber-950/20 border-amber-500/30' 
-                : 'bg-red-950/20 border-red-500/30'
+            <div className={`win10-drop-card ${
+              calculation.isDropSafe ? 'safe' : calculation.isDropWarning ? 'warning' : 'danger'
             }`}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
@@ -499,7 +494,7 @@ export default function CableCalculator() {
         <div className="sld-flow-container">
           
           {/* Source PLN */}
-          <div className="sld-flow-item">
+          <div className="sld-flow-item sld-source">
             <div className="w-8 h-8 rounded bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 mb-1.5">
               <Zap className="w-4 h-4" />
             </div>
@@ -509,25 +504,25 @@ export default function CableCalculator() {
 
           <div className="sld-arrow-item">
             <span className="text-[10px] text-slate-400 font-mono mb-1">APP / Meter</span>
-            <ArrowRight className="w-5 h-5 text-slate-500" />
+            <ArrowRight className="w-4 h-4 text-slate-500" />
           </div>
 
           {/* Protection MCB */}
-          <div className="sld-flow-item" style={{ borderColor: 'rgba(245, 158, 11, 0.4)' }}>
-            <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 font-bold font-mono mb-1.5">
+          <div className="sld-flow-item sld-mcb">
+            <div className="w-8 h-8 rounded bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-500 font-bold font-mono mb-1.5">
               {calculation.recommendedMcb}A
             </div>
-            <span className="text-xs font-bold text-amber-300">MCB Kurva C</span>
+            <span className="text-xs font-bold text-amber-400">MCB Kurva C</span>
             <span className="text-[11px] font-mono text-slate-400">In = {calculation.recommendedMcb} A</span>
           </div>
 
           <div className="sld-arrow-item">
-            <span className="text-[10px] text-amber-400 font-mono mb-1">{cableLength} m</span>
-            <ArrowRight className="w-5 h-5 text-slate-500" />
+            <span className="text-[10px] text-amber-500 font-mono mb-1">{cableLength} m</span>
+            <ArrowRight className="w-4 h-4 text-slate-500" />
           </div>
 
           {/* Cable Section */}
-          <div className="sld-flow-item" style={{ borderColor: 'rgba(14, 165, 233, 0.4)' }}>
+          <div className="sld-flow-item sld-cable">
             <div className="w-8 h-8 rounded bg-sky-500/10 border border-sky-500/40 flex items-center justify-center text-sky-400 font-bold font-mono mb-1.5">
               {calculation.selectedSize}
             </div>
@@ -537,11 +532,11 @@ export default function CableCalculator() {
 
           <div className="sld-arrow-item">
             <span className="text-[10px] text-emerald-400 font-mono mb-1">ΔV: {calculation.dropPercent}%</span>
-            <ArrowRight className="w-5 h-5 text-slate-500" />
+            <ArrowRight className="w-4 h-4 text-slate-500" />
           </div>
 
           {/* Load */}
-          <div className="sld-flow-item">
+          <div className="sld-flow-item sld-load">
             <div className="w-8 h-8 rounded bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-1.5">
               <Cpu className="w-4 h-4" />
             </div>
