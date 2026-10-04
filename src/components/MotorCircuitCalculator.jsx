@@ -696,7 +696,7 @@ export default function MotorCircuitCalculator() {
         </div>
 
         {/* Tabel Ringkasan Komparasi Perhitungan Angka Nyata */}
-        <div className="overflow-x-auto pt-2">
+        <div className="win10-table-container my-3">
           <table className="win10-table w-full text-xs">
             <thead>
               <tr>

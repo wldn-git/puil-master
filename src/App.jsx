@@ -8,6 +8,7 @@ import GroundingCalculator from './components/GroundingCalculator';
 import VisualGuides from './components/VisualGuides';
 import PuilKnowledgeBase from './components/PuilKnowledgeBase';
 import InstallationChecklist from './components/InstallationChecklist';
+import GlossaryReferences from './components/GlossaryReferences';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('motor'); // Default to motor tab to immediately showcase the new calculator!
@@ -52,6 +53,7 @@ export default function App() {
             {activeTab === 'guides' && <VisualGuides />}
             {activeTab === 'knowledge' && <PuilKnowledgeBase />}
             {activeTab === 'checklist' && <InstallationChecklist />}
+            {activeTab === 'glossary' && <GlossaryReferences />}
           </div>
         </main>
 

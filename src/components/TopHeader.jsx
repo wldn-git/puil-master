@@ -40,6 +40,11 @@ export default function TopHeader({ activeTab, theme, setTheme, onToggleMobileMe
           title: 'Checklist Audit Kelaikan Instalasi Listrik',
           subtitle: 'Formulir Inspeksi Mandiri Kepatuhan PUIL & Sertifikat Laik Operasi (SLO)'
         };
+      case 'glossary':
+        return {
+          title: 'Glosarium, Akronim & Referensi Standar PUIL',
+          subtitle: 'Kamus Definisi Istilah Teknis Kelistrikan, Singkatan Standar & Direktori Regulasi SNI/IEC'
+        };
       default:
         return {
           title: 'PUIL App by WLDN',

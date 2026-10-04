@@ -950,57 +950,57 @@ export default function VisualGuides() {
               <span className="text-xs font-mono text-slate-400">Ringkasan Referensi Cepat</span>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="win10-table-container my-3">
               <table className="win10-table w-full text-xs">
                 <thead>
                   <tr>
-                    <th>Sistem</th>
-                    <th>Titik Netral Trafo (Sumber)</th>
-                    <th>Bodi Beban Konsumen (BKT)</th>
-                    <th>Jumlah Kawat (3-Fasa)</th>
-                    <th>Proteksi Wajib</th>
+                    <th className="text-center" style={{ width: '85px' }}>Sistem</th>
+                    <th style={{ width: '21%' }}>Titik Netral Trafo (Sumber)</th>
+                    <th style={{ width: '23%' }}>Bodi Beban Konsumen (BKT)</th>
+                    <th style={{ width: '18%' }}>Jumlah Kawat (3-Fasa)</th>
+                    <th style={{ width: '16%' }}>Proteksi Wajib</th>
                     <th>Standar Indonesia</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className={selectedEarthingId === 'TT' ? 'bg-sky-500/10' : ''}>
-                    <td className="font-bold font-mono text-sky-400">TT</td>
+                  <tr className={selectedEarthingId === 'TT' ? 'bg-sky-500/15 font-semibold' : ''}>
+                    <td className="font-bold font-mono text-sky-500 text-center text-sm">TT</td>
                     <td>Ditanahkan langsung (Rb)</td>
                     <td>Ditanahkan mandiri (Ra ≤ 5 Ω)</td>
                     <td className="font-mono">4 kawat (L1, L2, L3, N)</td>
-                    <td><strong>RCD / GPAS 30mA (Wajib)</strong></td>
+                    <td><strong className="text-amber-500">RCD / GPAS 30mA (Wajib)</strong></td>
                     <td><span className="win10-badge win10-badge-success">Standar Resmi PLN Rumah</span></td>
                   </tr>
-                  <tr className={selectedEarthingId === 'TN-S' ? 'bg-sky-500/10' : ''}>
-                    <td className="font-bold font-mono text-emerald-400">TN-S</td>
+                  <tr className={selectedEarthingId === 'TN-S' ? 'bg-sky-500/15 font-semibold' : ''}>
+                    <td className="font-bold font-mono text-emerald-500 text-center text-sm">TN-S</td>
                     <td>Ditanahkan langsung (Rb)</td>
                     <td>Terhubung ke kabel PE sumber</td>
                     <td className="font-mono">5 kawat (L1, L2, L3, N, PE)</td>
                     <td>MCB / Sekring & RCD</td>
                     <td>Data Center & Rumah Sakit</td>
                   </tr>
-                  <tr className={selectedEarthingId === 'TN-C-S' ? 'bg-sky-500/10' : ''}>
-                    <td className="font-bold font-mono text-amber-400">TN-C-S</td>
+                  <tr className={selectedEarthingId === 'TN-C-S' ? 'bg-sky-500/15 font-semibold' : ''}>
+                    <td className="font-bold font-mono text-amber-500 text-center text-sm">TN-C-S</td>
                     <td>Ditanahkan langsung (Rb)</td>
                     <td>Terhubung ke PE dipecah di PDB</td>
                     <td className="font-mono">4 kawat (PEN) lalu 5 kawat</td>
                     <td>MCB & RCD (setelah split)</td>
                     <td>Gedung Komersial & Industri</td>
                   </tr>
-                  <tr className={selectedEarthingId === 'TN-C' ? 'bg-sky-500/10' : ''}>
-                    <td className="font-bold font-mono text-slate-300">TN-C</td>
+                  <tr className={selectedEarthingId === 'TN-C' ? 'bg-sky-500/15 font-semibold' : ''}>
+                    <td className="font-bold font-mono text-slate-400 text-center text-sm">TN-C</td>
                     <td>Ditanahkan langsung (Rb)</td>
                     <td>Terhubung ke kawat PEN</td>
                     <td className="font-mono">4 kawat (L1, L2, L3, PEN)</td>
-                    <td>MCB (<strong>Dilarang RCD</strong>)</td>
+                    <td>MCB (<strong className="text-rose-500">Dilarang RCD</strong>)</td>
                     <td>Khusus Feeder Utama Hulu</td>
                   </tr>
-                  <tr className={selectedEarthingId === 'IT' ? 'bg-sky-500/10' : ''}>
-                    <td className="font-bold font-mono text-purple-400">IT</td>
+                  <tr className={selectedEarthingId === 'IT' ? 'bg-sky-500/15 font-semibold' : ''}>
+                    <td className="font-bold font-mono text-purple-500 text-center text-sm">IT</td>
                     <td>Diisolasi / Impedansi Z tinggi</td>
                     <td>Ditanahkan mandiri (Ra)</td>
                     <td className="font-mono">3 / 4 kawat termonitor</td>
-                    <td><strong>IMD (Insulation Monitor)</strong></td>
+                    <td><strong className="text-purple-500">IMD (Insulation Monitor)</strong></td>
                     <td>Ruang Operasi RS (Kamar Bedah)</td>
                   </tr>
                 </tbody>

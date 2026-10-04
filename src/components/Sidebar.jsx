@@ -7,6 +7,7 @@ import {
   Palette, 
   BookOpen, 
   ClipboardCheck,
+  Library,
   X
 } from 'lucide-react';
 
@@ -19,6 +20,7 @@ export default function Sidebar({ activeTab, setActiveTab, isMobileOpen, setIsMo
     { id: 'guides', label: 'Panduan Visual SNI', icon: Palette },
     { id: 'knowledge', label: 'Kamus Pasal PUIL', icon: BookOpen },
     { id: 'checklist', label: 'Checklist Audit', icon: ClipboardCheck },
+    { id: 'glossary', label: 'Glosarium & Referensi', icon: Library },
   ];
 
   const handleSelectTab = (id) => {
