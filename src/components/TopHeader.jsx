@@ -42,7 +42,7 @@ export default function TopHeader({ activeTab, theme, setTheme, onToggleMobileMe
         };
       default:
         return {
-          title: 'PUIL Master',
+          title: 'PUIL App by WLDN',
           subtitle: 'Standar Instalasi Listrik SNI'
         };
     }
