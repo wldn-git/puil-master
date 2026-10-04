@@ -609,17 +609,22 @@ export default function VisualGuides() {
             {WIRE_COLOR_COMPARISON.map((wire, idx) => {
               const item = standardView === 'current' ? wire.current : wire.old;
               const isStriped = !!item.stripe;
+              const shortCode = wire.phase.includes('L1') ? 'L1 • Fasa R' :
+                                wire.phase.includes('L2') ? 'L2 • Fasa S' :
+                                wire.phase.includes('L3') ? 'L3 • Fasa T' :
+                                wire.phase.includes('Netral') ? 'N • Netral' :
+                                'PE • Ground';
 
               return (
                 <div key={idx} className="wire-card">
                   <div>
                     {/* Wire Graphic Strip */}
-                    <div className="wire-preview">
+                    <div className="wire-preview" style={{ borderRadius: '3px', boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.3)' }}>
                       {isStriped ? (
                         <div 
                           className="w-full h-full"
                           style={{
-                            background: `repeating-linear-gradient(45deg, #eab308, #eab308 10px, #16a34a 10px, #16a34a 20px)`
+                            background: `repeating-linear-gradient(45deg, #eab308, #eab308 12px, #16a34a 12px, #16a34a 24px)`
                           }}
                         ></div>
                       ) : (
@@ -628,16 +633,30 @@ export default function VisualGuides() {
                           style={{ backgroundColor: item.hex }}
                         ></div>
                       )}
-                      <span className="absolute px-2 py-0.5 rounded text-[11px] font-bold bg-black/75 text-white border border-white/20 font-mono">
-                        {wire.phase.split(' ')[0]} {wire.phase.split(' ')[1]}
+                      <span 
+                        className="absolute px-2.5 py-0.5 rounded text-[11px] font-bold font-mono select-none"
+                        style={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                          color: '#ffffff',
+                          border: '1px solid rgba(255, 255, 255, 0.35)',
+                          textShadow: '0 1px 2px rgba(0, 0, 0, 0.9)'
+                        }}
+                      >
+                        {shortCode}
                       </span>
                     </div>
 
                     <div className="font-bold text-xs text-white">{wire.phase}</div>
-                    <div className="text-xs font-bold text-amber-400 mt-0.5">{item.name}</div>
+                    <div className="text-xs font-bold text-amber-500 mt-0.5 flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full border border-black/20 shrink-0" style={{ backgroundColor: item.hex }}></span>
+                      <span>{item.name}</span>
+                    </div>
                   </div>
 
-                  <div className="mt-3 pt-2 border-t border-slate-800 text-[11px] text-slate-400 leading-tight">
+                  <div 
+                    className="mt-3 pt-2 text-[11px] text-slate-400 leading-tight"
+                    style={{ borderTop: '1px solid var(--win-border)' }}
+                  >
                     {wire.notes}
                   </div>
                 </div>
